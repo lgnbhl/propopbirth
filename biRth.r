@@ -14,6 +14,8 @@ library(forecast)   # ARIMA model
 library(here)       # paths
 library(tidyverse)
 
+data(package="propopbirth")
+
 
 # source functions
 path <- file.path(here::here(), "R")
@@ -26,7 +28,7 @@ year_last <- 2023
 age_fert_min <- 15
 age_fert_max <- 49
 spatial_code <- c("0261", "4566", "0198")
-spatial_unit <- c("Stadt Zürich", "Frauenfeld", "Uster")
+spatial_unit_ <- c("Stadt Zürich", "Frauenfeld", "Uster")
 
 
 
@@ -37,29 +39,44 @@ spatial_unit <- c("Stadt Zürich", "Frauenfeld", "Uster")
 # end of year female population at 'fertile age' 
 # comment: year and age minus 1 to calculate the mean annual population afterwards
 
-pop <- get_population_data(
-  number_fso = "px-x-0102010000_101",
-  year_first = year_first - 1,
-  year_last = year_last,
-  age_fert_min = age_fert_min - 1,
-  age_fert_max = age_fert_max,
-  spatial_code = spatial_code,
-  spatial_unit = spatial_unit,
-  with_nationality = TRUE
-)
+# pop <- get_population_data(
+#   number_fso = "px-x-0102010000_101",
+#   year_first = year_first - 1,
+#   year_last = year_last,
+#   age_fert_min = age_fert_min - 1,
+#   age_fert_max = age_fert_max,
+#   spatial_code = spatial_code,
+#   spatial_unit = spatial_unit
+# )
+
+   
+pop <- fso_pop
+
+# comments
+# age should be as of 14, not as of 15
+# year: should be as of 2010, not as of 2020 (according to parameters)
+
+
+# bir <- get_birth_data(
+#   year_first = year_first,
+#   year_last = year_last,
+#   age_fert_min = age_fert_min,
+#   age_fert_max = age_fert_max,
+#   spatial_code = spatial_code,
+#   spatial_unit = spatial_unit,
+#   with_nationality = TRUE
+# )
+
 
 
 # birth
-bir <- get_birth_data(
-  year_first = year_first,
-  year_last = year_last,
-  age_fert_min = age_fert_min,
-  age_fert_max = age_fert_max,
-  spatial_code = spatial_code,
-  spatial_unit = spatial_unit,
-  with_nationality = TRUE
-)
-
+bir <- fso_birth |> 
+  filter(age >= age_fert_min,
+         age <= age_fert_max,
+         spatial_unit %in% spatial_unit_)
+  
+  
+  
 
 # get input data ----------------------------------------------------------
 
