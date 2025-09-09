@@ -77,7 +77,7 @@ Historical population records from the FSO can be obtained with the function `pr
 ```{r, echo = TRUE, eval = FALSE}
 fso_pop <- get_population_data(
   number_fso = "px-x-0102010000_101",
-  year_first = 2020,
+  year_first = 2011,
   year_last = 2023,
   age_fert_min = 15,
   age_fert_max = 49,
