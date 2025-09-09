@@ -2,7 +2,7 @@
 title: "Fertility rate forecast"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{forecast_fertility_rate}
+  %\VignetteIndexEntry{Fertility rate forecast}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

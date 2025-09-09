@@ -2,7 +2,7 @@
 title: "TFR and MAB forecast"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{forecast_tfr_mab}
+  %\VignetteIndexEntry{TFR and MAB forecast}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
