@@ -1,5 +1,5 @@
 ---
-title: "forecast_tfr_mab"
+title: "TFR and MAB forecast"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{forecast_tfr_mab}
