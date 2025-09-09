@@ -37,7 +37,7 @@ You need birth and population data from the past to run the fertility rate forec
 +=====================+=========================================================================================================================+=================================================================================================+
 | **birth data**      | The historical number of births by females aggregated per demographic unit and year.                                    | -   `year` e.g. 2010 to 2023 for the FSO's birth data                                           |
 |                     |                                                                                                                         |                                                                                                 |
-|                     |                                                                                                                         | -   `spatial_unit` one (e.g. Canton) or several (e.g. municipalities) spatial units             |
+|                     |                                                                                                                         | -   `spatial_unit` one (e.g. canton) or several (e.g. municipalities) spatial units             |
 |                     |                                                                                                                         |                                                                                                 |
 |                     |                                                                                                                         | -   `nat` nationality, can be either "ch" and "int" or not specified (column `nat` is optional) |
 |                     |                                                                                                                         |                                                                                                 |
@@ -63,9 +63,11 @@ Currently, the FSO does not publish historical births data as open data. However
 The data for three selected municipalities looks like this:
 
 ```{r, echo = TRUE}
-fso_birth |>
-  dplyr::filter(spatial_unit %in% c("Stadt Zürich", "Frauenfeld", "Uster")) |>
-  DT::datatable()
+fso_bir <- fso_birth |>
+  dplyr::filter(spatial_unit %in% c("Stadt Zürich", "Frauenfeld", "Uster"))
+
+fso_bir |> 
+  DT::datatable(options = list(pageLength = 5))
 ```
 
 ## Population
@@ -89,29 +91,57 @@ The data for three selected municipalities looks like this:
 
 ```{r, echo = TRUE}
 fso_pop |>
-  dplyr::filter(spatial_unit %in% c("Stadt Zürich", "Frauenfeld", "Uster")) |>
-  DT::datatable()
+  DT::datatable(options = list(pageLength = 5))
 ```
 
 
-## Model input data
+## Create input data
 
-TODO
+First, the **mean annual population** is calculated for women at the so-called fertile age (usually 15 to 49). For each group (e.g. spatial unit, age, nationality), the mean value of the population at the beginning and the end of the year is calculated. 
+
+Second, the births per year and group (e.g. spatial unit, age, nationality) are divided by the average population of the same group (number of women). This gives the **age-specific fertility** rate per year and group.
+
+The **TFR (total fertility rate)** is calculated as the sum of the age-specific fertility rate per year and group (spatial unit, nationality). 
+
+The **MAB (mean age of the mother at birth)** is also calculated based on the age-specific fertility rate per year. For this calculation a weighted average over age is used.
+
+The parameter `fert_hist_years` determines how many years are used to calculate an average **age-specific fertility rate**. The FSO usually uses only one calendar year for its cantonal calculations. However, age-specific fertility rates can vary substantially from year to year, especially in smaller spatial units. There it makes sense to use an average over multiple years. First, births and population are averaged over the years. Then the ratio between births and population is calculated. 
+
+
 
 ```{r}
 input <- create_input_data(
   population = fso_pop,
-  births = fso_birth |>
-    dplyr::filter(spatial_unit %in% c("Stadt Zürich", "Frauenfeld", "Uster")),
+  births = fso_bir,
   year_first = 2011,
   year_last = 2023,
   age_fert_min = 15,
   age_fert_max = 49,
-  fert_hist_years = 1,
+  fert_hist_years = 3,
   binational = TRUE
 ) 
 ```
 
+
 ```{r}
-str(input)
+input$tfr |> 
+  DT::datatable(options = list(pageLength = 5))
 ```
+
+
+```{r}
+input$mab |> 
+  DT::datatable(options = list(pageLength = 5))
+```
+
+
+```{r}
+input$fer |> 
+  DT::datatable(options = list(pageLength = 5))
+```
+
+
+
+
+
+
