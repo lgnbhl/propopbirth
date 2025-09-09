@@ -9,12 +9,17 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Overview
+## Overview
 
 The first step in forecasting birth rates according to the FSO methodology is to **prepare the input data**. This is described in this vignette. The starting point is past birth and population data. Three input data sets are needed:
-- **TFR** (total fertility rate) per year  
-- **MAB** (mean age of the mother at birth) per year
-- **fertility** rate per age year
+
+
+
+
+-   **TFR** (total fertility rate) per year  
+-   **MAB** (mean age of the mother at birth) per year
+-   **fertility rate** per age year
+
 
 If the final forecast should distinguish by nationality and/or spatial unit, the three input data sets must also be differentiated according to these variables. 
 
@@ -23,14 +28,14 @@ If the final forecast should distinguish by nationality and/or spatial unit, the
 library(propopbirth)
 ```
 
-# Required data
+## Required data
 
 You need birth and population data from the past to run the fertility rate forecast. **If you don't have such data at hand, you can run the functions with example data**. Regardless of whether you bring your own or use example data, the structure of the data frames requires the following variables:
 
 +---------------------+-------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------+
-| Data                | Description                                                                                                             | Variables required                                                                              |
+| data                | description                                                                                                             | variables required                                                                              |
 +=====================+=========================================================================================================================+=================================================================================================+
-| **Birth data**      | The historical number of births by females aggregated per demographic unit and year.                                    | -   `year` e.g. 2010 to 2023 for the FSO's birth data                                           |
+| **birth data**      | The historical number of births by females aggregated per demographic unit and year.                                    | -   `year` e.g. 2010 to 2023 for the FSO's birth data                                           |
 |                     |                                                                                                                         |                                                                                                 |
 |                     |                                                                                                                         | -   `spatial_unit` one (e.g. Canton) or several (e.g. municipalities) spatial units             |
 |                     |                                                                                                                         |                                                                                                 |
@@ -40,7 +45,7 @@ You need birth and population data from the past to run the fertility rate forec
 |                     |                                                                                                                         |                                                                                                 |
 |                     |                                                                                                                         | -   `births` the number of births                                                               |
 +---------------------+-------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------+
-| **Population data** | Historical population records of females in a pre-defined fertility age range aggregated per demographic unit and year. | -   `year` e.g. 2010 to 2023 for the FSO's birth data                                           |
+| **population data** | Historical population records of females in a pre-defined fertility age range aggregated per demographic unit and year. | -   `year` e.g. 2010 to 2023 for the FSO's birth data                                           |
 |                     |                                                                                                                         |                                                                                                 |
 |                     |                                                                                                                         | -   `spatial_unit` one (e.g. Canton) or several (e.g. municipalities) spatial units             |
 |                     |                                                                                                                         |                                                                                                 |
