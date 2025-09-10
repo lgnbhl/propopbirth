@@ -100,7 +100,7 @@ input <- create_input_data(
 
 # optional: given forecast values
 temporal_end_tfr <- expand_grid(
-  spatial_unit = spatial_unit, 
+  spatial_unit = spatial_unit_name, 
   nat = c("ch", "int")) |> 
   mutate(y_end = c(0.8, 0.8, 1.0, 2.0, 1.2, 1.3))
 

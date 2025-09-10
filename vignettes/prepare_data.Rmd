@@ -69,7 +69,7 @@ fso_bir |>
 
 Historical population records from the FSO can be obtained with the function `propopbirth::get_population_data`, defining timeframe, spatial units and further specific arguments:
 
-```{r, echo = TRUE, eval = FALSE}
+```{r, echo = TRUE}
 fso_pop <- get_population_data(
   number_fso = "px-x-0102010000_101",
   year_first = 2010,

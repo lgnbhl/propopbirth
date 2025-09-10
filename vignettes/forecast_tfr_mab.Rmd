@@ -66,7 +66,7 @@ In the original FSO model, for the trend model an **ARIMA model** is used for th
 
 ## Temporal period
 
-In general, the FSO uses **given values** for TFR and MAB at the end of the temporal period. For the cantonal forecasts this is manageable. The FSO receives the target values from the cantons. However, this is often not possible or meaningful (e.g. forecasts for municipalities). Therefore, we provide in `{propopbirth}` an additional **data driven approach**. In this approach, the target points of the temporal period (point C in the figure below) are derived using the trend model. An additional determines, how much of the trend model is used to calculate the target point C (e.g. 0.7: 70% of the trend model is used).
+In general, the FSO uses **given values** for TFR and MAB at the end of the temporal period. For the cantonal forecasts this is manageable. The FSO receives the target values from the cantons. However, this is often not possible or meaningful (e.g. forecasts for municipalities). Therefore, we provide in `{propopbirth}` an additional **data-driven approach**. In this approach, the target points of the temporal period (point C in the figure below) are derived using the trend model. An additional determines, how much of the trend model is used to calculate the target point C (e.g. 0.7: 70% of the trend model is used).
 
 ```{r fig-point-C, echo=FALSE, out.width='50%', fig.cap="target point with data driven approach"}
 
@@ -78,30 +78,159 @@ For the temporal period both approaches are possible
 
 -   **given values**: a table with target values has to be provided (for each combination of forecast; e.g. for each subregion and nationality).
 
--   **data driven approach**: the proportion of trend has to be selected
+-   **data-driven approach**: the proportion of trend has to be selected
 
-The FSO uses three alternatives modules for the temporal period:
+The FSO uses three alternative modules for the temporal period:
 
-+---------------+-------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------+
-| module        | description                                                             | values required                                                                                                              |
-+===============+=========================================================================+==============================================================================================================================+
-| cubic         | interpolation from start to target point with a third-degree polynomial | -   `temporal_model`: "cubic"                                                                                                |
-|               |                                                                         |                                                                                                                              |
-|               |                                                                         | -   `year_begin`: first year of cubic forecast                                                                               |
-|               |                                                                         |                                                                                                                              |
-|               |                                                                         | -   `year_end`: last year of cubic forecast                                                                                  |
-|               |                                                                         |                                                                                                                              |
-|               |                                                                         | -   `trend_prop`: proportion of trend to derive the target point; has to be specified for the **data driven approach**       |
-|               |                                                                         |                                                                                                                              |
-|               |                                                                         | -   `temporal_end`: given target points; has to be specified if **given values** for the end of the temporal period are used |
-+---------------+-------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------+
-| Bézier        | interpolation from start to target point with a Bézier-curve            |                                                                                                                              |
-+---------------+-------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------+
-| constant      | The last value of the trend period is used for the temporal period      |                                                                                                                              |
-+---------------+-------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------+
++----------+--------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| module   | description                                                                                            | values required                                                                                                                                                                                                                                                                                                                                                                                    |
++==========+========================================================================================================+====================================================================================================================================================================================================================================================================================================================================================================================================+
+| cubic    | Interpolation from the start to the target point of the temporal period with a third-degree polynomial | -   `temporal_model`: "cubic"                                                                                                                                                                                                                                                                                                                                                                      |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   `year_begin`: first year of the cubic forecast                                                                                                                                                                                                                                                                                                                                                 |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   `year_end`: last year of the cubic forecast                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   `trend_prop`: proportion of trend to derive the target point; has to be specified for the **data driven approach**                                                                                                                                                                                                                                                                             |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   `temporal_end`: given target points; has to be specified if **given values** for the end of the temporal period are used                                                                                                                                                                                                                                                                       |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   `z0_prop`: the Bézier function uses the **slope at the starting point** of the temporal period. This is calculated from the trend period model. The parameter `z0_prop` is the proportion of the calculated slope that is used as slope of the curve at the starting point. This parameter is responsible for the curve shape at the **transition between the trend and the temporal period**. |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   z1_prop: the Bézier function also uses the **slope at the end point** of the temporal period. The parameter `z1_prop` is the proportion of the precalculated slope (according to the trend model) that is used as slope of the curve at the end point. This parameter is responsible for the curve shape at the **transition between the temporal and the constant period**.                   |
++----------+--------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Bézier   | Interpolation from the start to the target point of the temporal period with a Bézier-curve            | -   `temporal_model`: "Bezier"                                                                                                                                                                                                                                                                                                                                                                     |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   `year_begin`: first year of the Bézier forecast                                                                                                                                                                                                                                                                                                                                                |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   `year_end`: last year of the Bézier forecast                                                                                                                                                                                                                                                                                                                                                   |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   `trend_prop`: proportion of trend to derive the target point; has to be specified for the **data driven approach**                                                                                                                                                                                                                                                                             |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   `temporal_end`: given target points; has to be specified if **given values** for the end of the temporal period are used                                                                                                                                                                                                                                                                       |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   `z0_prop`: proportion of the **slope at the starting point** (same as for the cubic module)                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   z1_prop: proportion of the **slope at the end point** (same as for the cubic module)                                                                                                                                                                                                                                                                                                           |
++----------+--------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| constant | The last value of the trend period is used for the temporal period                                     | -   `temporal_model`: "constant"                                                                                                                                                                                                                                                                                                                                                                   |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   `year_begin`: first year of cubic forecast                                                                                                                                                                                                                                                                                                                                                     |
+|          |                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                    |
+|          |                                                                                                        | -   `year_end`: last year of cubic forecast                                                                                                                                                                                                                                                                                                                                                        |
++----------+--------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-## Temporal period
+## Constant period
+
+For the last section of the TFR and MAB forecast the FSO uses a constant model.
+
++-------------+-----------------------------------------------------------------------+----------------------------------------------+
+| module      | description                                                           | values required                              |
++=============+=======================================================================+==============================================+
+| constant    | The last value of the temporal period is used for the constant period | -   `constant_model`: "constant"             |
+|             |                                                                       |                                              |
+|             |                                                                       | -   `year_begin`: first year of the forecast |
+|             |                                                                       |                                              |
+|             |                                                                       | -   `year_end`: last year of the forecast    |
++-------------+-----------------------------------------------------------------------+----------------------------------------------+
+
+## Examples
+
+### Create input data
 
 ```{r setup}
 library(propopbirth)
 ```
+
+Get birth data
+
+```{r, echo = TRUE}
+fso_bir <- fso_birth |>
+  dplyr::filter(spatial_unit %in% c("Stadt Zürich", "Frauenfeld", "Uster"))
+```
+
+Get population data
+
+```{r, echo = TRUE}
+fso_pop <- get_population_data(
+  number_fso = "px-x-0102010000_101",
+  year_first = 2010,
+  year_last = 2023,
+  age_fert_min = 15,
+  age_fert_max = 49,
+  spatial_code = c("0261", "4566", "0198"),
+  spatial_unit = c("Stadt Zürich", "Frauenfeld", "Uster"),
+  binational = TRUE
+)
+```
+
+Create input data
+
+```{r, echo = TRUE}
+input <- create_input_data(
+  population = fso_pop,
+  births = fso_bir,
+  year_first = 2011,
+  year_last = 2023,
+  age_fert_min = 15,
+  age_fert_max = 49,
+  fert_hist_years = 3,
+  binational = TRUE
+) 
+```
+
+### Example 1
+
+-   topic: **TFR forecast**
+
+-   approach: **given target points**
+
+-   trend model: **linear**
+
+-   temporal model: **cubic**
+
+given target points (subjectively selected values)
+
+```{r, echo = TRUE}
+temporal_end_tfr <- expand_grid(
+  spatial_unit = c("Stadt Zürich", "Frauenfeld", "Uster"), 
+  nat = c("ch", "int")) |> 
+  mutate(y_end = c(0.8, 0.8, 1.0, 2.0, 1.2, 1.3))
+
+temporal_end_tfr |>
+  DT::datatable()
+```
+
+```{r, echo = TRUE}
+forecast_tfr_example1 <- forecast_tfr_mab(
+  topic = "tfr", 
+  input_dataset = input$tfr,
+  trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
+  temporal_model = c(
+    "cubic", 2027, 2055, trend_prop = 0.8, z0_prop = 0.7, z1_prop = 0
+  ),
+  temporal_end = NA,
+  constant_model = c("constant", 2056, 2075)
+  ) 
+
+```
+
+### Example 2
+
+-   topic: **TFR forecast**
+
+-   approach: **data-driven**
+
+-   trend model: **ARIMA**
+
+-   temporal model: **Bézier**
+
+### Example 3
+
+-   topic: **MAB forecast**
+
+-   approach: **data-driven**
+
+-   trend model: **linear**
+
+-   temporal model: **Bézier**
