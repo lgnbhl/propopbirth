@@ -86,14 +86,14 @@ input <- create_input_data(
 ) 
 
 
-# forecast_tfr <- forecast_tfr_mab(
-#   topic = "tfr", input_dataset = input$tfr,
-#   trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
-#   temporal_model = c("cubic", 2027, 2055, 
-#     trend_prop = 0.8, z0_prop = 0.7, z1_prop = 0),
-#   temporal_end = NA,
-#   constant_model = c("constant", 2056, 2075)
-#   ) 
+forecast_tfr <- forecast_tfr_mab(
+  topic = "tfr", input_dataset = input$tfr,
+  trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
+  temporal_model = c("cubic", 2027, 2055,
+    trend_prop = 0.8, z0_prop = 0.7, z1_prop = 0),
+  temporal_end = NA,
+  constant_model = c("constant", 2056, 2075)
+  )
 ```
 
 
