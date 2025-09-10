@@ -66,11 +66,41 @@ In the original FSO model, for the trend model an **ARIMA model** is used for th
 
 ## Temporal period
 
-```{r fig-point-C, echo=FALSE, out.width='50%', fig.cap="data driven approach"}
+In general, the FSO uses **given values** for TFR and MAB at the end of the temporal period. For the cantonal forecasts this is manageable. The FSO receives the target values from the cantons. However, this is often not possible or meaningful (e.g. forecasts for municipalities). Therefore, we provide in `{propopbirth}` an additional **data driven approach**. In this approach, the target points of the temporal period (point C in the figure below) are derived using the trend model. An additional determines, how much of the trend model is used to calculate the target point C (e.g. 0.7: 70% of the trend model is used).
+
+```{r fig-point-C, echo=FALSE, out.width='50%', fig.cap="target point with data driven approach"}
 
 knitr::include_graphics("figures/point_C.png")
 
 ```
+
+For the temporal period both approaches are possible
+
+-   **given values**: a table with target values has to be provided (for each combination of forecast; e.g. for each subregion and nationality).
+
+-   **data driven approach**: the proportion of trend has to be selected
+
+The FSO uses three alternatives modules for the temporal period:
+
++---------------+-------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------+
+| module        | description                                                             | values required                                                                                                              |
++===============+=========================================================================+==============================================================================================================================+
+| cubic         | interpolation from start to target point with a third-degree polynomial | -   `temporal_model`: "cubic"                                                                                                |
+|               |                                                                         |                                                                                                                              |
+|               |                                                                         | -   `year_begin`: first year of cubic forecast                                                                               |
+|               |                                                                         |                                                                                                                              |
+|               |                                                                         | -   `year_end`: last year of cubic forecast                                                                                  |
+|               |                                                                         |                                                                                                                              |
+|               |                                                                         | -   `trend_prop`: proportion of trend to derive the target point; has to be specified for the **data driven approach**       |
+|               |                                                                         |                                                                                                                              |
+|               |                                                                         | -   `temporal_end`: given target points; has to be specified if **given values** for the end of the temporal period are used |
++---------------+-------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------+
+| Bézier        | interpolation from start to target point with a Bézier-curve            |                                                                                                                              |
++---------------+-------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------+
+| constant      | The last value of the trend period is used for the temporal period      |                                                                                                                              |
++---------------+-------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------+
+
+## Temporal period
 
 ```{r setup}
 library(propopbirth)
