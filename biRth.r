@@ -29,7 +29,7 @@ year_last <- 2023
 age_fert_min <- 15
 age_fert_max <- 49
 spatial_code <- c("0261", "4566", "0198")
-spatial_unit <- c("Stadt Zürich", "Frauenfeld", "Uster")
+spatial_unit_name <- c("Stadt Zürich", "Frauenfeld", "Uster")
 
 
 
@@ -74,7 +74,7 @@ pop <- fso_pop
 bir <- fso_birth |> 
   filter(age >= age_fert_min,
          age <= age_fert_max,
-         spatial_unit %in% spatial_unit_)
+         spatial_unit %in% spatial_unit_name)
   
   
   
