@@ -1,6 +1,6 @@
 #' Population data from the Federal Statistical Office
 #'
-#' @description Population from the canton of Aargau.
+#' @description end year population from different spatial units.
 #'
 #' Update description in folder propop/R/
 
