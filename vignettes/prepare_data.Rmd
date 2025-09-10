@@ -13,16 +13,11 @@ editor_options:
 
 The first step in forecasting birth rates according to the FSO methodology is to **prepare the input data**. This is described in this vignette. The starting point is past birth and population data. Three input data sets are needed:
 
-
-
-
--   **TFR** (total fertility rate) per year  
+-   **TFR** (total fertility rate) per year\
 -   **MAB** (mean age of the mother at birth) per year
 -   **fertility rate** per age year
 
-
-If the final forecast should distinguish by nationality and/or spatial unit, the three input data sets must also be differentiated according to these variables. 
-
+If the final forecast should distinguish by nationality and/or spatial unit, the three input data sets must also be differentiated according to these variables.
 
 ```{r}
 library(propopbirth)
@@ -58,7 +53,7 @@ You need birth and population data from the past to run the fertility rate forec
 
 ## Births
 
-Currently, the FSO does not publish historical births data as open data. However, we have received permission to use and publish the data in `{propopbirth}`. We prepared the original data from the FSO, adapting column names and factor levels, and replaced municipality numbers by [municipality names](https://www.agvchapp.bfs.admin.ch/de/state/results?SnapshotDate=1.1.2023). 
+Currently, the FSO does not publish historical births data as open data. However, we have received permission to use and publish the data in `{propopbirth}`. We prepared the original data from the FSO, adapting column names and factor levels, and replaced municipality numbers by [municipality names](https://www.agvchapp.bfs.admin.ch/de/state/results?SnapshotDate=1.1.2023).
 
 The data for three selected municipalities looks like this:
 
@@ -77,7 +72,7 @@ Historical population records from the FSO can be obtained with the function `pr
 ```{r, echo = TRUE, eval = FALSE}
 fso_pop <- get_population_data(
   number_fso = "px-x-0102010000_101",
-  year_first = 2011,
+  year_first = 2010,
   year_last = 2023,
   age_fert_min = 15,
   age_fert_max = 49,
@@ -94,20 +89,17 @@ fso_pop |>
   DT::datatable(options = list(pageLength = 5))
 ```
 
-
 ## Create input data
 
-First, the **mean annual population** is calculated for women at the so-called fertile age (usually 15 to 49). For each group (e.g. spatial unit, age, nationality), the mean value of the population at the beginning and the end of the year is calculated. 
+First, the **mean annual population** is calculated for women at the so-called fertile age (usually 15 to 49). For each group (e.g. spatial unit, age, nationality), the mean value of the population at the beginning and the end of the year is calculated.
 
 Second, the births per year and group (e.g. spatial unit, age, nationality) are divided by the average population of the same group (number of women). This gives the **age-specific fertility** rate per year and group.
 
-The **TFR (total fertility rate)** is calculated as the sum of the age-specific fertility rate per year and group (spatial unit, nationality). 
+The **TFR (total fertility rate)** is calculated as the sum of the age-specific fertility rate per year and group (spatial unit, nationality).
 
 The **MAB (mean age of the mother at birth)** is also calculated based on the age-specific fertility rate per year. For this calculation a weighted average over age is used.
 
-The parameter `fert_hist_years` determines how many years are used to calculate an average **age-specific fertility rate**. The FSO usually uses only one calendar year for its cantonal calculations. However, age-specific fertility rates can vary substantially from year to year, especially in smaller spatial units. There it makes sense to use an average over multiple years. First, births and population are averaged over the years. Then the ratio between births and population is calculated. 
-
-
+The parameter `fert_hist_years` determines how many years are used to calculate an average **age-specific fertility rate**. The FSO usually uses only one calendar year for its cantonal calculations. However, age-specific fertility rates can vary substantially from year to year, especially in smaller spatial units. There it makes sense to use an average over multiple years. First, births and population are averaged over the years. Then the ratio between births and population is calculated.
 
 ```{r}
 input <- create_input_data(
@@ -122,26 +114,17 @@ input <- create_input_data(
 ) 
 ```
 
-
 ```{r}
 input$tfr |> 
   DT::datatable(options = list(pageLength = 5))
 ```
-
 
 ```{r}
 input$mab |> 
   DT::datatable(options = list(pageLength = 5))
 ```
 
-
 ```{r}
 input$fer |> 
   DT::datatable(options = list(pageLength = 5))
 ```
-
-
-
-
-
-
