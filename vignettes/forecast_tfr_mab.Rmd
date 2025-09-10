@@ -36,35 +36,35 @@ knitr::include_graphics("figures/time_periods.png")
 
 In the original FSO model, for the trend model an **ARIMA model** is used for the trend period. Depending on the structure of the past TFR and MAB data, the ARIMA forecast is not always stable. Therefore, in `{propopbirth}` a **linear model** can be used as an alternative to the ARIMA model.
 
-+--------+------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| module | description                                                                              | values required                                                                                                                                                             |
-+========+==========================================================================================+=============================================================================================================================================================================+
-| ARIMA  | ARIMA model. The auto.arima function is used: auto.arima(x, d = 2, max.p = 3, max.q = 3) | -   `topic`: "TFR" or "MAB"                                                                                                                                                 |
-|        |                                                                                          |                                                                                                                                                                             |
-|        |                                                                                          | -   `input_dataset`: input\$tfr or input\$mab                                                                                                                               |
-|        |                                                                                          |                                                                                                                                                                             |
-|        |                                                                                          | -   `trend_model`: "ARIMA"                                                                                                                                                  |
-|        |                                                                                          |                                                                                                                                                                             |
-|        |                                                                                          | -   `year_begin`: first year of ARIMA forecast                                                                                                                              |
-|        |                                                                                          |                                                                                                                                                                             |
-|        |                                                                                          | -   `year_end`: last year of ARIMA forecast                                                                                                                                 |
-|        |                                                                                          |                                                                                                                                                                             |
-|        |                                                                                          | -   `trend_prop`: proportion of the ARIMA forecast used. Number from 0 to 1 (1 = ARIMA prediction, 0 = last data value, 0.5 = mean of ARIMA prediction and last data value) |
-+--------+------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| lm     | linear model (lm function)                                                               | -   `topic`: "TFR" or "MAB"                                                                                                                                                 |
-|        |                                                                                          |                                                                                                                                                                             |
-|        |                                                                                          | -   `input_dataset`: input\$tfr or input\$mab                                                                                                                               |
-|        |                                                                                          |                                                                                                                                                                             |
-|        |                                                                                          | -   `trend_model`: "lm"                                                                                                                                                     |
-|        |                                                                                          |                                                                                                                                                                             |
-|        |                                                                                          | -   `year_begin`: first year of linear model forecast                                                                                                                       |
-|        |                                                                                          |                                                                                                                                                                             |
-|        |                                                                                          | -   `year_end`: last year of linear model forecast                                                                                                                          |
-|        |                                                                                          |                                                                                                                                                                             |
-|        |                                                                                          | -   `trend_past`: how many past years are used to fit the model?                                                                                                            |
-|        |                                                                                          |                                                                                                                                                                             |
-|        |                                                                                          | -   `trend_prop`: proportion of the ARIMA forecast used. Number from 0 to 1 (1 = ARIMA prediction, 0 = last data value, 0.5 = mean of ARIMA prediction and last data value) |
-+--------+------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++------------+------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| module     | description                                                                              | values required                                                                                                                                                             |
++============+==========================================================================================+=============================================================================================================================================================================+
+| ARIMA      | ARIMA model. The auto.arima function is used: auto.arima(x, d = 2, max.p = 3, max.q = 3) | -   `topic`: "TFR" or "MAB"                                                                                                                                                 |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `input_dataset`: input\$tfr or input\$mab                                                                                                                               |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `trend_model`: "ARIMA"                                                                                                                                                  |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `year_begin`: first year of ARIMA forecast                                                                                                                              |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `year_end`: last year of ARIMA forecast                                                                                                                                 |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `trend_prop`: proportion of the ARIMA forecast used. Number from 0 to 1 (1 = ARIMA prediction, 0 = last data value, 0.5 = mean of ARIMA prediction and last data value) |
++------------+------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| lm         | linear model (lm function)                                                               | -   `topic`: "TFR" or "MAB"                                                                                                                                                 |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `input_dataset`: input\$tfr or input\$mab                                                                                                                               |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `trend_model`: "lm"                                                                                                                                                     |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `year_begin`: first year of linear model forecast                                                                                                                       |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `year_end`: last year of linear model forecast                                                                                                                          |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `trend_past`: how many past years are used to fit the model?                                                                                                            |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `trend_prop`: proportion of the ARIMA forecast used. Number from 0 to 1 (1 = ARIMA prediction, 0 = last data value, 0.5 = mean of ARIMA prediction and last data value) |
++------------+------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 ## Temporal period
 
@@ -126,23 +126,22 @@ The FSO uses three alternative modules for the temporal period:
 
 For the last section of the TFR and MAB forecast the FSO uses a constant model.
 
-+----------+-----------------------------------------------------------------------+----------------------------------------------+
-| module   | description                                                           | values required                              |
-+==========+=======================================================================+==============================================+
-| constant | The last value of the temporal period is used for the constant period | -   `constant_model`: "constant"             |
-|          |                                                                       |                                              |
-|          |                                                                       | -   `year_begin`: first year of the forecast |
-|          |                                                                       |                                              |
-|          |                                                                       | -   `year_end`: last year of the forecast    |
-+----------+-----------------------------------------------------------------------+----------------------------------------------+
++-------------+-----------------------------------------------------------------------+----------------------------------------------+
+| module      | description                                                           | values required                              |
++=============+=======================================================================+==============================================+
+| constant    | The last value of the temporal period is used for the constant period | -   `constant_model`: "constant"             |
+|             |                                                                       |                                              |
+|             |                                                                       | -   `year_begin`: first year of the forecast |
+|             |                                                                       |                                              |
+|             |                                                                       | -   `year_end`: last year of the forecast    |
++-------------+-----------------------------------------------------------------------+----------------------------------------------+
 
 ## Examples
 
 ### Create input data
 
-```{r setup, include=FALSE}
+```{r setup}
 library(propopbirth)
-library(tidyverse)
 ```
 
 Create input data
