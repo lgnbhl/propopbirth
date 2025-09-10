@@ -3,8 +3,10 @@ title: "TFR and MAB forecast"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{TFR and MAB forecast}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -138,8 +140,9 @@ For the last section of the TFR and MAB forecast the FSO uses a constant model.
 
 ### Create input data
 
-```{r setup}
+```{r setup, include=FALSE}
 library(propopbirth)
+library(tidyverse)
 ```
 
 Create input data
