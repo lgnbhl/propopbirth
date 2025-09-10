@@ -16,15 +16,15 @@ constant_model <- function(points_dat, year_begin, year_end) {
   year_end <- as.numeric(year_end)
 
   # last year of previous model
-  last_year <- in_dat |>
+  last_year <- points_dat |>
     dplyr::filter(year == max(year)) |>
     dplyr::select(spatial_unit, nat, y)
 
   # prediction
   pred <- tidyr::expand_grid(
     year = year_begin:year_end,
-    spatial_unit = unique(in_dat$spatial_unit),
-    nat = unique(in_dat$nat)
+    spatial_unit = unique(points_dat$spatial_unit),
+    nat = unique(points_dat$nat)
   ) |>
     dplyr::left_join(last_year, by = c("spatial_unit", "nat")) |>
     dplyr::mutate(

@@ -13,13 +13,14 @@ library(BFS)        # for FSO input data
 library(forecast)   # ARIMA model
 library(here)       # paths
 library(tidyverse)
+library(propopbirth)
 
-data(package="propopbirth")
+# data(package="propopbirth")
 
 
 # source functions
-path <- file.path(here::here(), "R")
-invisible(map(list.files(path, pattern = ".R", full.names = TRUE), source))
+# path <- file.path(here::here(), "R")
+# invisible(map(list.files(path, pattern = ".R", full.names = TRUE), source))
 
 
 # overall parameters
@@ -28,7 +29,7 @@ year_last <- 2023
 age_fert_min <- 15
 age_fert_max <- 49
 spatial_code <- c("0261", "4566", "0198")
-spatial_unit_ <- c("Stadt Zürich", "Frauenfeld", "Uster")
+spatial_unit_name <- c("Stadt Zürich", "Frauenfeld", "Uster")
 
 
 
@@ -73,21 +74,21 @@ pop <- fso_pop
 bir <- fso_birth |> 
   filter(age >= age_fert_min,
          age <= age_fert_max,
-         spatial_unit %in% spatial_unit_)
+         spatial_unit %in% spatial_unit_name)
   
   
   
 
 # get input data ----------------------------------------------------------
 
-input <- get_input_data(
+input <- create_input_data(
   pop = pop,
   bir = bir,
   year_first = year_first,
   year_last = year_last,
   age_fert_min = age_fert_min,
   age_fert_max = age_fert_max,
-  fer_last_years = 1
+  fert_hist_years = 1
 )
 
 # comment:
@@ -106,10 +107,12 @@ temporal_end_tfr <- expand_grid(
 
 # forecast
 forecast_tfr <- forecast_tfr_mab(
-  topic = "tfr", input_dataset = input$tfr,
+  topic = "tfr", 
+  input_dataset = input$tfr,
   trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
-  temporal_model = c("cubic", 2027, 2055, 
-    trend_prop = 0.8, z0_prop = 0.7, z1_prop = 0),
+  temporal_model = c(
+    "cubic", 2027, 2055, trend_prop = 0.8, z0_prop = 0.7, z1_prop = 0
+  ),
   temporal_end = NA,
   constant_model = c("constant", 2056, 2075)
   ) 

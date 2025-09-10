@@ -104,7 +104,7 @@ forecast_tfr_mab <- function(topic,
 
   if (constant_model[1] == "constant") {
     constant_dat <- constant_model(
-      in_dat = temporal_dat,
+      points_dat = temporal_dat,
       year_begin = constant_model[2],
       year_end = constant_model[3]
     )
