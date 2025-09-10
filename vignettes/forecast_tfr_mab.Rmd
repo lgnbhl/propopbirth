@@ -20,14 +20,9 @@ First, TFR (total fertility rate) and MAB (mean age of the mother at birth) fore
 
 The FSO model for TFR and MAB consists of three time periods
 
-
-
 -   **trend** period: in the FSO model usually a few years (one to five years)
 -   **temporal** period: the majority of forecast period (FSO: approximately until 2055)
 -   **constant** period: end of the for forecast (FSO: until 2075)
-
-
-
 
 ```{r fig-time-periods, echo=FALSE, out.width='70%', fig.cap="time periods"}
 
@@ -35,18 +30,41 @@ knitr::include_graphics("figures/time_periods.png")
 
 ```
 
-
 ## Trend period
 
 In the original FSO model, for the trend model an **ARIMA model** is used for the trend period. Depending on the structure of the past TFR and MAB data, the ARIMA forecast is not always stable. Therefore, in `{propopbirth}` a **linear model** can be used as an alternative to the ARIMA model.
 
++------------+------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| module     | description                                                                              | values required                                                                                                                                                             |
++============+==========================================================================================+=============================================================================================================================================================================+
+| ARIMA      | ARIMA model. The auto.arima function is used: auto.arima(x, d = 2, max.p = 3, max.q = 3) | -   `topic`: "TFR" or "MAB"                                                                                                                                                 |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `input_dataset`: input\$tfr or input\$mab                                                                                                                               |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `trend_model`: "ARIMA"                                                                                                                                                  |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `year_begin`: first year of ARIMA forecast                                                                                                                              |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `year_end`: last year of ARIMA forecast                                                                                                                                 |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `trend_prop`: proportion of the ARIMA forecast used. Number from 0 to 1 (1 = ARIMA prediction, 0 = last data value, 0.5 = mean of ARIMA prediction and last data value) |
++------------+------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| lm         | linear model (lm function)                                                               | -   `topic`: "TFR" or "MAB"                                                                                                                                                 |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `input_dataset`: input\$tfr or input\$mab                                                                                                                               |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `trend_model`: "lm"                                                                                                                                                     |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `year_begin`: first year of linear model forecast                                                                                                                       |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `year_end`: last year of linear model forecast                                                                                                                          |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `trend_past`: how many past years are used to fit the model?                                                                                                            |
+|            |                                                                                          |                                                                                                                                                                             |
+|            |                                                                                          | -   `trend_prop`: proportion of the ARIMA forecast used. Number from 0 to 1 (1 = ARIMA prediction, 0 = last data value, 0.5 = mean of ARIMA prediction and last data value) |
++------------+------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 ## Temporal period
-
-
-
-
-
 
 ```{r fig-point-C, echo=FALSE, out.width='50%', fig.cap="data driven approach"}
 
@@ -54,48 +72,6 @@ knitr::include_graphics("figures/point_C.png")
 
 ```
 
-| period | module | keyword | variables required   |
-|--------|--------|---------|------------|
-| trend  | ARIMA  | "ARIMA" | -   `trend_past` how many years of the past are used to fit the model |
-|        | lm     | "lm"    | -   `trend_prop` proportion of trend that is used for the forecast |
-|        |        |         |            |
-
-
-
-
-
-
 ```{r setup}
 library(propopbirth)
 ```
-
-```{r}
-
-fso_bir <- fso_birth |>
-  dplyr::filter(spatial_unit %in% c("Stadt Zürich", "Frauenfeld", "Uster"))
-
-input <- create_input_data(
-  population = fso_pop,
-  births = fso_bir,
-  year_first = 2011,
-  year_last = 2023,
-  age_fert_min = 15,
-  age_fert_max = 49,
-  fert_hist_years = 3,
-  binational = TRUE
-) 
-
-
-forecast_tfr <- forecast_tfr_mab(
-  topic = "tfr", input_dataset = input$tfr,
-  trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
-  temporal_model = c("cubic", 2027, 2055,
-    trend_prop = 0.8, z0_prop = 0.7, z1_prop = 0),
-  temporal_end = NA,
-  constant_model = c("constant", 2056, 2075)
-  )
-```
-
-
-
-
