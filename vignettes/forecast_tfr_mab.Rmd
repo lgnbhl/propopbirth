@@ -27,11 +27,23 @@ The FSO model for TFR and MAB consists of three time periods
 -   **constant** period: end of the for forecast (FSO: until 2075)
 
 
+
+
 ```{r fig-time-periods, echo=FALSE, out.width='70%', fig.cap="time periods"}
 
 knitr::include_graphics("figures/time_periods.png")
 
 ```
+
+
+## Trend period
+
+In the original FSO model, for the trend model an **ARIMA model** is used for the trend period. Depending on the structure of the past TFR and MAB data, the ARIMA forecast is not always stable. Therefore, in `{propopbirth}` a **linear model** can be used as an alternative to the ARIMA model.
+
+
+## Temporal period
+
+
 
 
 
@@ -48,6 +60,7 @@ knitr::include_graphics("figures/point_C.png")
 ```{r setup}
 library(propopbirth)
 ```
+
 
 
 
