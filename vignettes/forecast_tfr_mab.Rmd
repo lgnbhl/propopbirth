@@ -54,6 +54,14 @@ knitr::include_graphics("figures/point_C.png")
 
 ```
 
+| period | module | keyword | variables required   |
+|--------|--------|---------|------------|
+| trend  | ARIMA  | "ARIMA" | -   `trend_past` how many years of the past are used to fit the model |
+|        | lm     | "lm"    | -   `trend_prop` proportion of trend that is used for the forecast |
+|        |        |         |            |
+
+
+
 
 
 
@@ -61,6 +69,32 @@ knitr::include_graphics("figures/point_C.png")
 library(propopbirth)
 ```
 
+```{r}
+
+fso_bir <- fso_birth |>
+  dplyr::filter(spatial_unit %in% c("Stadt Zürich", "Frauenfeld", "Uster"))
+
+input <- create_input_data(
+  population = fso_pop,
+  births = fso_bir,
+  year_first = 2011,
+  year_last = 2023,
+  age_fert_min = 15,
+  age_fert_max = 49,
+  fert_hist_years = 3,
+  binational = TRUE
+) 
+
+
+# forecast_tfr <- forecast_tfr_mab(
+#   topic = "tfr", input_dataset = input$tfr,
+#   trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
+#   temporal_model = c("cubic", 2027, 2055, 
+#     trend_prop = 0.8, z0_prop = 0.7, z1_prop = 0),
+#   temporal_end = NA,
+#   constant_model = c("constant", 2056, 2075)
+#   ) 
+```
 
 
 
