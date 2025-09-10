@@ -4,10 +4,10 @@
 \alias{constant_model}
 \title{Constant model}
 \usage{
-constant_model(points_dat, year_begin, year_end)
+constant_model(in_dat, year_begin, year_end)
 }
 \arguments{
-\item{points_dat}{tibble with model results of the previous period by
+\item{in_dat}{tibble with model results of the previous period by
 \code{spatial_unit} and \code{nat}.}
 
 \item{year_begin}{first year of the prediction.}
