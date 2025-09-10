@@ -13,7 +13,7 @@ editor_options:
 
 The first step in forecasting birth rates according to the FSO methodology is to **prepare the input data**. This is described in this vignette. The starting point is past birth and population data. Three input data sets are needed:
 
--   **TFR** (total fertility rate) per year\
+-   **TFR** (total fertility rate) per year
 -   **MAB** (mean age of the mother at birth) per year
 -   **fertility rate** per age year
 

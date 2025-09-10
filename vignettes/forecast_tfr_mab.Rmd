@@ -142,31 +142,12 @@ For the last section of the TFR and MAB forecast the FSO uses a constant model.
 library(propopbirth)
 ```
 
-Get birth data
+Create input data
 
 ```{r, echo = TRUE}
 fso_bir <- fso_birth |>
   dplyr::filter(spatial_unit %in% c("Stadt Zürich", "Frauenfeld", "Uster"))
-```
 
-Get population data
-
-```{r, echo = TRUE}
-fso_pop <- get_population_data(
-  number_fso = "px-x-0102010000_101",
-  year_first = 2010,
-  year_last = 2023,
-  age_fert_min = 15,
-  age_fert_max = 49,
-  spatial_code = c("0261", "4566", "0198"),
-  spatial_unit = c("Stadt Zürich", "Frauenfeld", "Uster"),
-  binational = TRUE
-)
-```
-
-Create input data
-
-```{r, echo = TRUE}
 input <- create_input_data(
   population = fso_pop,
   births = fso_bir,
@@ -189,7 +170,7 @@ input <- create_input_data(
 
 -   temporal model: **cubic**
 
-given target points (subjectively selected values)
+Given target points (subjectively selected values)
 
 ```{r, echo = TRUE}
 temporal_end_tfr <- expand_grid(
@@ -197,9 +178,9 @@ temporal_end_tfr <- expand_grid(
   nat = c("ch", "int")) |> 
   mutate(y_end = c(0.8, 0.8, 1.0, 2.0, 1.2, 1.3))
 
-temporal_end_tfr |>
-  DT::datatable()
 ```
+
+TFR forecast
 
 ```{r, echo = TRUE}
 forecast_tfr_example1 <- forecast_tfr_mab(
@@ -213,6 +194,13 @@ forecast_tfr_example1 <- forecast_tfr_mab(
   constant_model = c("constant", 2056, 2075)
   ) 
 
+```
+
+```{r}
+ggplot(forecast_tfr_example1) +
+  geom_line(aes(x = year, y = tfr, color = category)) +
+  geom_point(aes(x = year, y = tfr, color = category)) +
+  facet_grid(nat ~ spatial_unit)
 ```
 
 ### Example 2
