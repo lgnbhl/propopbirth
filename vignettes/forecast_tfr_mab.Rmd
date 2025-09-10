@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+
 ## Overview
 
 First, TFR (total fertility rate) and MAB (mean age of the mother at birth) forecasts are calculated. In general, the FSO uses the **same model structure** for both forecasts. However, different model types and parameters can be used for the TFR and MAB forecast.
@@ -140,9 +142,12 @@ For the last section of the TFR and MAB forecast the FSO uses a constant model.
 
 ### Create input data
 
-```{r setup}
+```{r setup, message=FALSE, warning=FALSE}
 library(propopbirth)
+library(ggplot2)
+library(tidyverse)
 ```
+
 
 Create input data
 
@@ -175,10 +180,10 @@ input <- create_input_data(
 Given target points (subjectively selected values)
 
 ```{r, echo = TRUE}
-temporal_end_tfr <- expand_grid(
+temporal_end_tfr <- tidyr::expand_grid(
   spatial_unit = c("Stadt Zürich", "Frauenfeld", "Uster"), 
   nat = c("ch", "int")) |> 
-  mutate(y_end = c(0.8, 0.8, 1.0, 2.0, 1.2, 1.3))
+  dplyr::mutate(y_end = c(0.8, 0.8, 1.0, 2.0, 1.2, 1.3))
 
 ```
 
@@ -198,7 +203,7 @@ forecast_tfr_example1 <- forecast_tfr_mab(
 
 ```
 
-```{r}
+```{r, fig.width=7, fig.height=5}
 ggplot(forecast_tfr_example1) +
   geom_line(aes(x = year, y = tfr, color = category)) +
   geom_point(aes(x = year, y = tfr, color = category)) +
@@ -215,6 +220,33 @@ ggplot(forecast_tfr_example1) +
 
 -   temporal model: **Bézier**
 
+
+
+```{r, echo = TRUE}
+forecast_tfr_example2 <- forecast_tfr_mab(
+  topic = "tfr", 
+  input_dataset = input$tfr,
+  trend_model = c("ARIMA", 2024, 2026, trend_past = 7, trend_prop = 0.5),
+  temporal_model = c(
+    "Bezier", 2027, 2055, trend_prop = 0.8, z0_prop = 0.7, z1_prop = 0
+  ),
+  temporal_end = NA,
+  constant_model = c("constant", 2056, 2075)
+  ) 
+
+```
+
+```{r, fig.width=7, fig.height=5}
+ggplot(forecast_tfr_example2) +
+  geom_line(aes(x = year, y = tfr, color = category)) +
+  geom_point(aes(x = year, y = tfr, color = category)) +
+  facet_grid(nat ~ spatial_unit)
+```
+
+
+
+
+
 ### Example 3
 
 -   topic: **MAB forecast**
@@ -224,3 +256,29 @@ ggplot(forecast_tfr_example1) +
 -   trend model: **linear**
 
 -   temporal model: **Bézier**
+
+```{r, echo = TRUE}
+forecast_tfr_example3 <- forecast_tfr_mab(
+  topic = "mab", 
+  input_dataset = input$mab,
+  trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
+  temporal_model = c(
+    "Bezier", 2027, 2055, trend_prop = 0.3, z0_prop = 0.7, z1_prop = 0
+  ),
+  temporal_end = NA,
+  constant_model = c("constant", 2056, 2075)
+  ) 
+
+```
+
+```{r, fig.width=7, fig.height=5}
+ggplot(forecast_tfr_example3) +
+  geom_line(aes(x = year, y = mab, color = category)) +
+  geom_point(aes(x = year, y = mab, color = category)) +
+  facet_grid(nat ~ spatial_unit)
+```
+
+
+
+
+
