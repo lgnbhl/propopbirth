@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 The age-specific fertility rate forecast is modeled in four steps:
 
--   **Cumulate, standardize**: The age-specific fertility rate (see input data preparation) is cumulated an standardized to values between 0 and 1. This cumulated and standardized value is called $y*$.
+-   **Cumulate, standardize**: The age-specific fertility rate (see input data preparation) is cumulated and standardized to values between 0 and 1. This cumulated and standardized value is called $y*$.
 
 -   **Regression**: First, $y*$ is transformed. Then, a fifth-degree regression is fitted to $y*$ vs. $x$ (i.e. age + 0.5). The parameters $a_0$, ..., $a_5$ of the regression are estimated.
 
@@ -30,16 +30,15 @@ x = age + 0.5 \\
 y = a_0 + a_1 x + a_2 x^2 + a_3 x^3 + a_4 x^4 + a_5 x^5 
 $$
 
--   **Optimization**: In this step, the previously calculated MAB forecast is used. From the regression above, all parameters are kept constant except $a_0$. The value of $a_0$ is changed, until the y-values, back transformed to fertility rates result in the MAB forecast.
+-   **Optimization**: In this step, the previously calculated MAB forecast is used (MAB prediction for each year in the future). From the regression above, all parameters are kept constant except $a_0$. For every year in the future, only the value of $a_0$ is changed (only the intercept, all other regression coefficients are kept constant). This is done for every year until the y-values (back transformed to fertility rates) result in the previously calculated MAB forecast.
 
--   **Reverse**: In this step, the TFR forecast calculated earlier is applied. The standardized fertility rate is multiplied by the TFR forecast. As a result you get the future age-specific fertility rate.
+-   **Reverse**: In this step, the TFR forecast calculated earlier is applied. The standardized fertility rate is multiplied by the TFR forecast. As a result you get the future age-specific fertility rates.
 
 ```{r fig-model-structure, echo=FALSE, out.width='85%', fig.cap="model structure"}
 
 knitr::include_graphics("figures/fertility_rate_forecast.png")
 
 ```
-
 
 ## Code example
 
@@ -50,6 +49,7 @@ library(tidyverse)
 ```
 
 Create input data
+
 ```{r, echo = TRUE}
 fso_bir <- fso_birth |>
   dplyr::filter(spatial_unit %in% c("Stadt Zürich", "Frauenfeld", "Uster"))
@@ -67,6 +67,7 @@ input <- create_input_data(
 ```
 
 TFR forecast
+
 ```{r, echo = TRUE}
 forecast_tfr <- forecast_tfr_mab(
   topic = "tfr", 
@@ -86,7 +87,6 @@ ggplot(forecast_tfr) +
   geom_point(aes(x = year, y = tfr, color = category)) +
   facet_grid(nat ~ spatial_unit)
 ```
-
 
 MAB forecast
 
@@ -126,8 +126,8 @@ forecast_fer |>
   DT::datatable(options = list(pageLength = 5))
 ```
 
-
 Plot with year on x-axis
+
 ```{r, fig.width=7, fig.height=5}
 y_last <- max(input[["fer_y"]]$year)
 
@@ -142,6 +142,7 @@ forecast_fer |>
 ```
 
 Plot with age on x-axis
+
 ```{r, fig.width=7, fig.height=5}
 forecast_fer |>     
     bind_rows(input$fer_y ) |>
@@ -151,4 +152,3 @@ forecast_fer |>
     geom_line(aes(age, birth_rate, color = year)) +
     facet_grid(nat ~ spatial_unit)
 ```
-
