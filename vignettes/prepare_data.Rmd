@@ -19,9 +19,13 @@ The first step in forecasting birth rates according to the FSO methodology is to
 
 If the final forecast should distinguish by nationality and/or spatial unit, the three input data sets must also be differentiated according to these variables.
 
-```{r}
+
+```{r setup, message=FALSE, warning=FALSE}
+library(ggplot2)
 library(propopbirth)
+library(tidyverse)
 ```
+
 
 ## Required data
 
@@ -114,14 +118,39 @@ input <- create_input_data(
 ) 
 ```
 
+### TFR
+
+```{r, fig.width=7, fig.height=3}
+ggplot(input$tfr) +
+  geom_line(aes(x = year, y = tfr, color = nat)) +
+  facet_wrap(~ spatial_unit)
+```
+
 ```{r}
 input$tfr |> 
   DT::datatable(options = list(pageLength = 5))
 ```
 
+
+### MAB 
+
+```{r, fig.width=7, fig.height=3}
+ggplot(input$mab) +
+  geom_line(aes(x = year, y = mab, color = nat)) +
+  facet_wrap(~ spatial_unit)
+```
+
 ```{r}
 input$mab |> 
   DT::datatable(options = list(pageLength = 5))
+```
+
+### Age-specific fertility rate
+
+```{r, fig.width=7, fig.height=3}
+ggplot(input$fer) +
+  geom_line(aes(x = age, y = fer, color = nat)) +
+  facet_wrap(~ spatial_unit)
 ```
 
 ```{r}

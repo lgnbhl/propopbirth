@@ -44,8 +44,8 @@ knitr::include_graphics("figures/fertility_rate_forecast.png")
 ## Code example
 
 ```{r setup, message=FALSE, warning=FALSE}
-library(propopbirth)
 library(ggplot2)
+library(propopbirth)
 library(tidyverse)
 ```
 
@@ -120,6 +120,12 @@ forecast_fer <- forecast_fertility_rate(
   year_begin = 2024, 
   year_end = 2075)
 ```
+
+```{r}
+forecast_fer |> 
+  DT::datatable(options = list(pageLength = 5))
+```
+
 
 Plot with year on x-axis
 ```{r, fig.width=7, fig.height=5}
