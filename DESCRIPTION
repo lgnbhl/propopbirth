@@ -18,9 +18,9 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: First, model input data are calculated. 
-Second, TFR (total fertility rate) and MAB (mean age of the mother at birth) are predicted.
-Third, TFR and MAB forecasts are used to predict the age-specific birth rates.
+Description: First, model input data are calculated. Second, TFR (total fertility 
+    rate) and MAB (mean age of the mother at birth) are predicted. Third, TFR 
+    and MAB forecasts are used to predict the age-specific birth rates.
 URL: Set URL
 License: GPL (>= 3)
 Depends: 
