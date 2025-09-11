@@ -52,8 +52,23 @@ Create input data
 
 ```{r, echo = TRUE}
 fso_bir <- fso_birth |>
-  dplyr::filter(spatial_unit %in% c("Stadt Zuerich", "Frauenfeld", "Aarau"))
+  dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich"))
+```
 
+```{r, echo = TRUE, eval=TRUE}
+fso_pop <- get_population_data(
+  number_fso = "px-x-0102010000_101",
+  year_first = 2010,
+  year_last = 2023,
+  age_fert_min = 15,
+  age_fert_max = 49,
+  spatial_code = c("0198", "4566", "0261"),
+  spatial_unit = c("Aarau", "Frauenfeld", "Stadt Zürich"),
+  binational = TRUE
+)
+```
+
+```{r, echo = TRUE}
 input <- create_input_data(
   population = fso_pop,
   births = fso_bir,
@@ -145,7 +160,7 @@ Plot with age on x-axis
 
 ```{r, fig.width=7, fig.height=5}
 forecast_fer |>     
-    bind_rows(input$fer_y ) |>
+    bind_rows(input$fer_y) |>
     filter(year %% 10 == 0) |>
     mutate(year = factor(year)) |>
     ggplot() +

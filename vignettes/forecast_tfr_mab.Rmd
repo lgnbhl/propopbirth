@@ -150,8 +150,23 @@ Create input data
 
 ```{r, echo = TRUE}
 fso_bir <- fso_birth |>
-  dplyr::filter(spatial_unit %in% c("Stadt Zuerich", "Frauenfeld", "Aarau"))
+  dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich"))
+```
 
+```{r, echo = TRUE, eval=TRUE}
+fso_pop <- get_population_data(
+  number_fso = "px-x-0102010000_101",
+  year_first = 2010,
+  year_last = 2023,
+  age_fert_min = 15,
+  age_fert_max = 49,
+  spatial_code = c("0198", "4566", "0261"),
+  spatial_unit = c("Aarau", "Frauenfeld", "Stadt Zürich"),
+  binational = TRUE
+)
+```
+
+```{r, echo = TRUE}
 input <- create_input_data(
   population = fso_pop,
   births = fso_bir,
@@ -178,7 +193,7 @@ Given target points (subjectively selected values)
 
 ```{r, echo = TRUE}
 temporal_end_tfr <- tidyr::expand_grid(
-  spatial_unit = c("Stadt Zuerich", "Frauenfeld", "Aarau"), 
+  spatial_unit = c("Aarau", "Frauenfeld", "Stadt Zürich"), 
   nat = c("ch", "int")) |> 
   dplyr::mutate(y_end = c(0.8, 0.8, 1.0, 2.0, 1.2, 1.3))
 
