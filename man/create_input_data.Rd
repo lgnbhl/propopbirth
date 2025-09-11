@@ -52,7 +52,7 @@ Create model input data
 create_input_data(
   population = fso_pop,
   births = fso_birth |>
-    dplyr::filter(spatial_unit \%in\% c("Stadt Zürich", "Frauenfeld", "Uster")),
+    dplyr::filter(spatial_unit \%in\% c("Stadt Zuerich", "Frauenfeld", "Aarau")),
   year_first = 2011,
   year_last = 2023,
   age_fert_min = 15,
