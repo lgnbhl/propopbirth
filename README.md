@@ -69,5 +69,88 @@ municipalities, but also districts).
 
 ## Examples
 
-See vignettes; in particular vignette 3 (example of the entire forecast
-of the birth rate).
+Detailed examples with explanations are provided in the vignettes (step
+by step). Here an example of entire birth rate forecast for three
+municipalities.
+
+### Birth and population data
+
+```{r setup, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(propopbirth)
+library(tidyverse)
+```
+
+```{r, echo = TRUE}
+fso_bir <- fso_birth |>
+  dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich"))
+```
+
+```{r, echo = TRUE, eval=TRUE}
+fso_pop <- get_population_data(
+  number_fso = "px-x-0102010000_101",
+  year_first = 2010,
+  year_last = 2023,
+  age_fert_min = 15,
+  age_fert_max = 49,
+  spatial_code = c("0198", "4566", "0261"),
+  spatial_unit = c("Aarau", "Frauenfeld", "Stadt Zürich"),
+  binational = TRUE
+)
+```
+
+### Create model input data
+
+```{r, echo = TRUE}
+input <- create_input_data(
+  population = fso_pop,
+  births = fso_bir,
+  year_first = 2011,
+  year_last = 2023,
+  age_fert_min = 15,
+  age_fert_max = 49,
+  fert_hist_years = 3,
+  binational = TRUE
+) 
+```
+
+### TFR (total fertility rate) forecast
+
+```{r, echo = TRUE}
+forecast_tfr <- forecast_tfr_mab(
+  topic = "tfr", 
+  input_dataset = input$tfr,
+  trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
+  temporal_model = c(
+    "Bezier", 2027, 2055, trend_prop = 0.5, z0_prop = 0.7, z1_prop = 0
+  ),
+  temporal_end = NA,
+  constant_model = c("constant", 2056, 2075)
+  ) 
+```
+
+### MAB (mean age of the mother at birth) forecast
+
+```{r, echo = TRUE}
+forecast_mab <- forecast_tfr_mab(
+  topic = "mab", 
+  input_dataset = input$mab,
+  trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
+  temporal_model = c(
+    "cubic", 2027, 2055, trend_prop = 0.3, z0_prop = 0.7, z1_prop = 0
+  ),
+  temporal_end = NA,
+  constant_model = c("constant", 2056, 2075)
+  ) 
+```
+
+### Forecast of the age-specific fertility rate
+
+```{r, echo = TRUE}
+forecast_fer <- forecast_fertility_rate(
+  fer_dat = input$fer,
+  tfr_dat = forecast_tfr,
+  mab_dat = forecast_mab, 
+  year_begin = 2024, 
+  year_end = 2075)
+```
