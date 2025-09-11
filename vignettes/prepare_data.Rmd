@@ -61,7 +61,7 @@ The data for three selected municipalities looks like this:
 
 ```{r, echo = TRUE}
 fso_bir <- fso_birth |>
-  dplyr::filter(spatial_unit %in% c("Stadt Zürich", "Frauenfeld", "Uster"))
+  dplyr::filter(spatial_unit %in% c("Stadt Zuerich", "Frauenfeld", "Aarau"))
 
 fso_bir |> 
   DT::datatable(options = list(pageLength = 5))
@@ -79,7 +79,7 @@ fso_pop <- get_population_data(
   age_fert_min = 15,
   age_fert_max = 49,
   spatial_code = c("0261", "4566", "0198"),
-  spatial_unit = c("Stadt Zürich", "Frauenfeld", "Uster"),
+  spatial_unit = c("Stadt Zuerich", "Frauenfeld", "Aarau"),
   binational = TRUE
 )
 ```

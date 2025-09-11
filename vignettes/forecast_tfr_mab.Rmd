@@ -150,7 +150,7 @@ Create input data
 
 ```{r, echo = TRUE}
 fso_bir <- fso_birth |>
-  dplyr::filter(spatial_unit %in% c("Stadt Zürich", "Frauenfeld", "Uster"))
+  dplyr::filter(spatial_unit %in% c("Stadt Zuerich", "Frauenfeld", "Aarau"))
 
 input <- create_input_data(
   population = fso_pop,
@@ -178,7 +178,7 @@ Given target points (subjectively selected values)
 
 ```{r, echo = TRUE}
 temporal_end_tfr <- tidyr::expand_grid(
-  spatial_unit = c("Stadt Zürich", "Frauenfeld", "Uster"), 
+  spatial_unit = c("Stadt Zuerich", "Frauenfeld", "Aarau"), 
   nat = c("ch", "int")) |> 
   dplyr::mutate(y_end = c(0.8, 0.8, 1.0, 2.0, 1.2, 1.3))
 

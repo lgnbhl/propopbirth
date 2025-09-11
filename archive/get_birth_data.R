@@ -17,8 +17,8 @@
 #         year_last = 2023,
 #         age_fert_min = 15,
 #         age_fert_max = 49,
-#         spatial_code = c("0261", "4566", "0198"),
-#         spatial_unit = c("Stadt Zürich", "Frauenfeld", "Uster"),
+#         spatial_code = c("0261", "4566", "4001"),
+#         spatial_unit = c("Stadt Zuerich", "Frauenfeld", "Aarau"),
 #         with_nationality = TRUE)
 get_birth_data <- function(year_first, year_last,
                            age_fert_min, age_fert_max,
