@@ -26,7 +26,7 @@ The FSO model for TFR and MAB consists of three time periods
 -   **temporal** period: the majority of forecast period (FSO: approximately until 2055)
 -   **constant** period: end of the for forecast (FSO: from 2056 until 2075)
 
-```{r fig-time-periods, echo=FALSE, out.width='70%', fig.cap="time periods"}
+```{r fig-time-periods, echo = FALSE, out.width = '70%', fig.cap = "time periods"}
 
 knitr::include_graphics("figures/time_periods.png")
 
@@ -72,7 +72,7 @@ If an `lm` model is used, the window of past years (`trend_past`) and the propor
 
 In general, the FSO uses **given values** for TFR and MAB at the end of the temporal period. These target points are more or less subjectively determined by the cantons. For the cantonal forecasts this is manageable. However, this is often not possible or meaningful (e.g. forecasts for many municipalities or other spatial units). Therefore, we provide in `{propopbirth}` an additional **data-driven approach**. In this approach, the target points of the temporal period (point C in the figure below) are derived using the trend period model. A parameter determines, how much of the trend model is used to calculate the target point C. Example: A parameter of 0.7 means: 70 % of the trend is projected to the future to determine point C.
 
-```{r fig-point-C, echo=FALSE, out.width='50%', fig.cap="target point with data driven approach"}
+```{r fig-point-C, echo = FALSE, out.width = '50%', fig.cap = "target point with data driven approach"}
 
 knitr::include_graphics("figures/point_C.png")
 
@@ -142,10 +142,10 @@ For the last section of the TFR and MAB forecast the FSO uses a constant model.
 
 ### Create input data
 
-```{r setup, message=FALSE, warning=FALSE}
+```{r setup, message = FALSE, warning = FALSE}
 library(propopbirth)
 library(ggplot2)
-library(tidyverse)
+library(dplyr)
 ```
 
 Create input data
@@ -179,8 +179,7 @@ Given target points (subjectively selected values)
 temporal_end_tfr <- tidyr::expand_grid(
   spatial_unit = c("Aarau", "Frauenfeld", "Stadt Zürich"), 
   nat = c("ch", "int")) |> 
-  dplyr::mutate(y_end = c(0.8, 0.8, 1.0, 2.0, 1.2, 1.3))
-
+  dplyr::mutate(y_end = c(0.8, 1.5, 0.8, 2.0, 0.9, 0.9))
 ```
 
 TFR forecast
@@ -196,16 +195,17 @@ forecast_tfr_example1 <- forecast_tfr_mab(
     model = "cubic", start = 2027, end = 2055, trend_prop = 0.8, z0_prop = 0.7, 
     z1_prop = 0
   ),
-  temporal_end = NA,
+  temporal_end = temporal_end_tfr,
   constant_model = c(model = "constant", start = 2056, end = 2075)
 ) 
 ```
 
-```{r, fig.width=7, fig.height=5}
+```{r, fig.width = 7, fig.height = 5}
 ggplot(forecast_tfr_example1) +
   geom_line(aes(x = year, y = tfr, color = category)) +
   geom_point(aes(x = year, y = tfr, color = category)) +
-  facet_grid(nat ~ spatial_unit)
+  facet_grid(nat ~ spatial_unit) +
+  theme_minimal()
 ```
 
 ### Example 2
@@ -235,11 +235,12 @@ forecast_tfr_example2 <- forecast_tfr_mab(
 
 ```
 
-```{r, fig.width=7, fig.height=5}
+```{r, fig.width = 7, fig.height = 5}
 ggplot(forecast_tfr_example2) +
   geom_line(aes(x = year, y = tfr, color = category)) +
   geom_point(aes(x = year, y = tfr, color = category)) +
-  facet_grid(nat ~ spatial_unit)
+  facet_grid(nat ~ spatial_unit) +
+  theme_minimal()
 ```
 
 ### Example 3
@@ -252,7 +253,7 @@ ggplot(forecast_tfr_example2) +
 
 -   temporal model: **Bézier**
 
-```{r, echo = TRUE, eval = FALSE}
+```{r, echo = TRUE}
 forecast_tfr_example3 <- forecast_tfr_mab(
   topic = "mab", 
   topic_data = input$mab,
@@ -268,9 +269,10 @@ forecast_tfr_example3 <- forecast_tfr_mab(
 ) 
 ```
 
-```{r, fig.width=7, fig.height=5, eval = FALSE}
+```{r, fig.width = 7, fig.height = 5}
 ggplot(forecast_tfr_example3) +
   geom_line(aes(x = year, y = mab, color = category)) +
   geom_point(aes(x = year, y = mab, color = category)) +
-  facet_grid(nat ~ spatial_unit)
+  facet_grid(nat ~ spatial_unit) +
+  theme_minimal()
 ```
