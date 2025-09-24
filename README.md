@@ -79,25 +79,7 @@ municipalities.
 ```{r setup, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(propopbirth)
-library(tidyverse)
-```
-
-```{r, echo = TRUE}
-fso_bir <- fso_birth |>
-  dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich"))
-```
-
-```{r, echo = TRUE, eval=TRUE}
-fso_pop <- get_population_data(
-  number_fso = "px-x-0102010000_101",
-  year_first = 2010,
-  year_last = 2023,
-  age_fert_min = 15,
-  age_fert_max = 49,
-  spatial_code = c("0198", "4566", "0261"),
-  spatial_unit = c("Aarau", "Frauenfeld", "Stadt Zürich"),
-  binational = TRUE
-)
+library(dplyr)
 ```
 
 ### Create model input data
@@ -105,7 +87,8 @@ fso_pop <- get_population_data(
 ```{r, echo = TRUE}
 input <- create_input_data(
   population = fso_pop,
-  births = fso_bir,
+  births = fso_birth |> 
+    dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich")),
   year_first = 2011,
   year_last = 2023,
   age_fert_min = 15,
@@ -119,30 +102,36 @@ input <- create_input_data(
 
 ```{r, echo = TRUE}
 forecast_tfr <- forecast_tfr_mab(
-  topic = "tfr", 
-  input_dataset = input$tfr,
-  trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
+  topic = "tfr",
+  topic_data = input$tfr,
+  trend_model = c(
+    model = "lm", start = 2024, end = 2026, trend_past = 7, trend_prop = 0.5
+  ),
   temporal_model = c(
-    "Bezier", 2027, 2055, trend_prop = 0.5, z0_prop = 0.7, z1_prop = 0
+    model = "cubic", start = 2027, end = 2055, trend_prop = 0.8, z0_prop = 0.7,
+    z1_prop = 0
   ),
   temporal_end = NA,
-  constant_model = c("constant", 2056, 2075)
-  ) 
+  constant_model = c(model = "constant", start = 2056, end = 2075)
+)
 ```
 
 ### MAB (mean age of the mother at birth) forecast
 
 ```{r, echo = TRUE}
 forecast_mab <- forecast_tfr_mab(
-  topic = "mab", 
-  input_dataset = input$mab,
-  trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
+  topic = "mab",
+  topic_data = input$mab,
+  trend_model = c(
+    model = "lm", start = 2024, end = 2026, trend_past = 7, trend_prop = 0.5
+  ),
   temporal_model = c(
-    "cubic", 2027, 2055, trend_prop = 0.3, z0_prop = 0.7, z1_prop = 0
+    model = "Bezier", start = 2027, end = 2055, trend_prop = 0.3, z0_prop = 0.7,
+    z1_prop = 0
   ),
   temporal_end = NA,
-  constant_model = c("constant", 2056, 2075)
-  ) 
+  constant_model = c(model = "constant", start = 2056, end = 2075)
+) 
 ```
 
 ### Forecast of the age-specific fertility rate
