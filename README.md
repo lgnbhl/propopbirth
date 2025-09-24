@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # propopbirth
 
 Birth rate forecasts based on FSO (Federal Statistical Office)

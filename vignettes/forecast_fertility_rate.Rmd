@@ -44,6 +44,10 @@ knitr::include_graphics("figures/fertility_rate_forecast.png")
 library(ggplot2)
 library(propopbirth)
 library(dplyr)
+
+# load package data
+data("fso_pop")
+data("fso_birth")
 ```
 
 Create input data

@@ -18,7 +18,6 @@ utils::globalVariables(c(
   "n_birth", # <create_input_data>
   "spatial_unit", # <forecast_fertility_rate>
   "nat", # <forecast_fertility_rate>
-  "dplyr", # <forecast_fertility_rate>
   "fer", # <forecast_fertility_rate>
   "fer_corr", # <forecast_fertility_rate>
   "tx_cum", # <forecast_fertility_rate>
@@ -55,9 +54,10 @@ utils::globalVariables(c(
   "valueTexts", # <get_population_data>
   "year_num", # <get_population_data>
   "age_num", # <get_population_data>
+  ":=", # <get_population_data>
+  "nat_fso_text", # <get_population_data>
   "Jahr", # <get_population_data>
   "Alter", # <get_population_data>
-  "Ständige und nichtständige Wohnbevölkerung", # <get_population_data>
   "year", # <get_population_data>
   "nat", # <get_population_data>
   "age", # <get_population_data>
@@ -69,7 +69,6 @@ utils::globalVariables(c(
   "a3", # <pred_regression>
   "a4", # <pred_regression>
   "a5", # <pred_regression>
-  "dplyr", # <temporal_Bezier>
   "z0", # <temporal_Bezier>
   "z1", # <temporal_Bezier>
   "x0", # <temporal_Bezier>
@@ -112,7 +111,6 @@ utils::globalVariables(c(
   "spatial_unit", # <temporal_points>
   "nat", # <temporal_points>
   "y_past_last", # <temporal_points>
-  "dplyr", # <temporal_points>
   "y_new", # <temporal_points>
   "delta_y", # <temporal_points>
   "delta_x", # <temporal_points>

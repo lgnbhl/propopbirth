@@ -29,7 +29,6 @@ temporal_points <- function(
   z0_prop <- as.numeric(z0_prop)
   z1_prop <- as.numeric(z1_prop)
 
-
   # prepare past data
   past_prep <- input_past |>
     dplyr::mutate(category = "past")
@@ -45,7 +44,9 @@ temporal_points <- function(
     dplyr::arrange(spatial_unit, nat, year) |>
     dplyr::left_join(past_last, by = c("spatial_unit", "nat")) |>
     dplyr::mutate(
-      y_new = pmax(0, dplyr::if_else(year <= year_start, y,
+      y_new = pmax(0, dplyr::if_else(
+        year <= year_start,
+        y,
         y_past_last + trend_prop * (y - y_past_last)
       )),
       delta_y = c(NA, diff(y_new)),

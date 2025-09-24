@@ -15,7 +15,7 @@ editor_options:
 ```{r setup, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(propopbirth)
-library(tidyverse)
+library(dplyr)
 ```
 
 ## Overview
@@ -63,6 +63,9 @@ Currently, the FSO does not publish historical births data as open data. However
 The data for three selected municipalities looks like this:
 
 ```{r, echo = TRUE}
+# load package data
+data("fso_birth")
+
 fso_birth |> 
   dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich")) |> 
   DT::datatable(options = list(pageLength = 5))

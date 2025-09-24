@@ -146,6 +146,10 @@ For the last section of the TFR and MAB forecast the FSO uses a constant model.
 library(propopbirth)
 library(ggplot2)
 library(dplyr)
+
+# load package data
+data("fso_pop")
+data("fso_birth")
 ```
 
 Create input data

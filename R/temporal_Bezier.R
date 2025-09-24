@@ -38,7 +38,7 @@ temporal_Bezier <- function(
       t2 = ((x1 - xc) - (((x1 - xc)**2) + ((year - x1) * (x0 + x1 - (2 * xc))))**(0.5)) / (x0 + x1 - (2 * xc)),
       yt1 = pmax(0, (t1 * ((t1 * y0) + ((1 - t1) * yc))) + ((1 - t1) * ((t1 * yc) + ((1 - t1) * y1)))),
       y = pmax(0, (t2 * ((t2 * y0) + ((1 - t2) * yc))) + ((1 - t2) * ((t2 * yc) + ((1 - t2) * y1)))),
-      category = "Bézier"
+      category = "Bezier"
     ) |>
     dplyr::select(spatial_unit, nat, year, y, category)
 

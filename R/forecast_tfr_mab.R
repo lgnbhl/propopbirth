@@ -251,7 +251,7 @@ forecast_tfr_mab <- function(
   }
 
   # time series (past and forecast) -----------------------------------------
-  time_series <- bind_rows(
+  time_series <- dplyr::bind_rows(
     dplyr::mutate(input_data, category = "past"),
     dplyr::filter(
       trend_data, 
