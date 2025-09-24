@@ -50,25 +50,12 @@ forecast_tfr_mab <- function(
   assertthat::assert_that(is.numeric(topic_data[[topic]]),
     msg = paste0("Column `", topic, "` in `topic_data` must be numeric.")
   )
-  # Create dummy variables for spatial unit and nationality if those aren't
-  # specified in the input data
-  if ("spatial_unit" %in% names(topic_data)){
-    assertthat::assert_that(is.character(topic_data$spatial_unit),
-      msg = "Column `spatial_unit` in `topic_data` must be character."
-    )
-  } else if (!"spatial_unit" %in% names(topic_data)){
-    topic_data <- topic_data |> 
-      dplyr::mutate(spatial_unit = "spatial_unit")
-  }
-    
-  if ("nat" %in% names(topic_data)){
-    assertthat::assert_that(is.character(topic_data$nat),
-      msg = "Column `nat` in `topic_data` must be character."
-    )
-  } else if (!"nat" %in% names(topic_data)){
-    topic_data <- topic_data |> 
-      dplyr::mutate(nat = "nat")
-  }
+  assertthat::assert_that(is.character(topic_data$spatial_unit),
+    msg = "Column `spatial_unit` in `topic_data` must be character."
+  )
+  assertthat::assert_that(is.character(topic_data$nat),
+    msg = "Column `nat` in `topic_data` must be character."
+  )
 
   # topic -------------------------------------------------------------------
   # rename topic-column (either `tfr` or `mab`) to column `y`.

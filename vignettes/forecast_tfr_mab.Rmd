@@ -153,8 +153,7 @@ Create input data
 ```{r, echo = TRUE}
 input <- create_input_data(
   population = fso_pop,
-  births = fso_birth |> 
-   dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich")) ,
+  births = fso_birth,
   year_first = 2011,
   year_last = 2023,
   age_fert_min = 15,

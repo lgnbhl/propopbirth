@@ -22,6 +22,8 @@ trend_lm <- function(
   year_end <- as.numeric(year_end)
   trend_past <- as.numeric(trend_past)
   trend_prop <- as.numeric(trend_prop)
+  
+  browser()
 
   # last year of the past
   past_last <- input_lm |>
@@ -34,7 +36,18 @@ trend_lm <- function(
     dplyr::filter(year >= max(year) - trend_past + 1)
 
   # fit the model
-  lm_fit <- lm(y ~ year * spatial_unit * nat, data = in_dat)
+  # several options for the lm function depending on the existence of several
+  # factor levels (e.g. if only one spatial unit is present, the variable will
+  # not be considered in the lm)
+  if (length(unique(in_dat$spatial_unit)) > 1 & length(unique(in_dat$nat)) > 1) {
+    lm_fit <- lm(y ~ year * spatial_unit * nat, data = in_dat)
+  } else if (length(unique(in_dat$spatial_unit)) > 1) {
+    lm_fit <- lm(y ~ year * spatial_unit, data = in_dat)
+  } else if (length(unique(in_dat$nat)) > 1) {
+    lm_fit <- lm(y ~ year * nat, data = in_dat)
+  } else {
+    lm_fit <- lm(y ~ year, data = in_dat)
+  }
 
   # prediction (on purpose until the end of the temporal forecast)
   new_data <- tidyr::expand_grid(
@@ -42,6 +55,7 @@ trend_lm <- function(
     spatial_unit = unique(in_dat$spatial_unit),
     nat = unique(in_dat$nat)
   )
+  
   lm_pred <- new_data |>
     dplyr::mutate(
       y_pred = pmax(0, predict(lm_fit, newdata = new_data)),
