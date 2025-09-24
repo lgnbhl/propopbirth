@@ -27,7 +27,10 @@ Depends:
     R (>= 2.10)
 Imports:
   dplyr,
-  tibble
+  tibble,
+  forecast,
+  BFS,
+  assertthat
 Suggests: 
     knitr,
     rmarkdown,
