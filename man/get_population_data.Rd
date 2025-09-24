@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_population_data.R
 \name{get_population_data}
 \alias{get_population_data}
-\title{FSO population (females at 'fertile' age)}
+\title{Get FSO population (females at 'fertile' age)}
 \usage{
 get_population_data(
   number_fso,
@@ -12,30 +12,44 @@ get_population_data(
   age_fert_max,
   spatial_code,
   spatial_unit,
-  with_nationality = TRUE
+  binational = TRUE
 )
 }
 \arguments{
-\item{number_fso}{number of FSO table (STAT-TAB)}
+\item{number_fso}{character, number of FSO table (STAT-TAB)}
 
-\item{year_first}{first year}
+\item{year_first}{numeric, first year.}
 
-\item{year_last}{last year}
+\item{year_last}{numeric, last year.}
 
-\item{age_fert_min}{minimum age (of 'fertile age')}
+\item{age_fert_min}{numeric, minimum age (of 'fertile age').}
 
-\item{age_fert_max}{maximum age (of 'fertile age')}
+\item{age_fert_max}{numeric, maximum age (of 'fertile age').}
 
-\item{spatial_code}{official FSO codes, vector}
+\item{spatial_code}{character, vector, official FSO codes.}
 
-\item{spatial_unit}{spatial unit names (free choice), vector}
+\item{spatial_unit}{character, vector, spatial unit names (free choice).}
 
-\item{with_nationality}{TRUE (with nationality), FALSE (without nationality)}
+\item{binational}{boolean, \code{TRUE} indicates that projections discriminate
+between two groups of nationalities. \code{FALSE} indicates that the
+projection is run without distinguishing between nationalities.}
 }
 \value{
 female population at 'fertile age' at the end of the year,
 tibble (spatial_unit, year, age, pop), with or without nat (nationality)
 }
 \description{
-FSO population (females at 'fertile' age)
+Get FSO population (females at 'fertile' age)
+}
+\examples{
+get_population_data(
+  number_fso = "px-x-0102010000_101",
+  year_first = 2020,
+  year_last = 2023,
+  age_fert_min = 15,
+  age_fert_max = 49,
+  spatial_code = c("0261", "4566", "4001"),
+  spatial_unit = c("Stadt Zuerich", "Frauenfeld", "Aarau"),
+  binational = TRUE
+)
 }

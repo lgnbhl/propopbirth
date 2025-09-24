@@ -1,16 +1,20 @@
-#' mab (mean age at birth) function
+#' MAB (mean age at birth) function
 #'
-#' @param a0 # intercept (to be optimized), one value
-#' @param age # age (from age_min - 1 until age_max), vector
-#' @param y_no_a0 # regression result without intercept, vector
-#' @param mab_proj # projected mab (objective), one value
+#' @param a0 numeric, intercept (to be optimized).
+#' @param age vector, age (from `age_min` - 1 until `age_max`).
+#' @param y_no_a0 vector, regression result without intercept.
+#' @param mab_proj numeric, projected mab (objective).
 #'
-#' @return # diff (absolute difference between mab and mab_proj), one value
+#' @return numeric, `diff` (absolute difference between mab and mab_proj).
 #' @export
 #' @autoglobal
 #'
-#' @examples
-mab_fun <- function(a0, age, y_no_a0, mab_proj) {
+#' @noRd
+mab_fun <- function(
+    a0,
+    age, 
+    y_no_a0, 
+    mab_proj) {
   # y according to regression
   y_reg <- a0 + y_no_a0
 
@@ -21,7 +25,7 @@ mab_fun <- function(a0, age, y_no_a0, mab_proj) {
   fer_age <- c(0, diff(tx_sta_reg))
 
   # mean age at birth
-  # on purpose also calculate over (age_min - 1) since
+  # on purpose also calculate over (`age_min` - 1) since
   # contribution at that age is zero
   mab <- weighted.mean(age, fer_age)
 

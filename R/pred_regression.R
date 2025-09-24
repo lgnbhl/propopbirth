@@ -1,19 +1,19 @@
 #' regression model: fit and prediction
 #'
-#' @param y # regression fit
-#' @param x1 # explanatory variable (age + 0.5
-#' @param x2 # explanatory variable (x1 ^ 2)
-#' @param x3 # explanatory variable (x1 ^ 3)
-#' @param x4 # explanatory variable (x1 ^ 4)
-#' @param x5 # explanatory variable (x1 ^ 5)
-#' @param age_min # minimum fertile age
-#' @param age_max # maximum fertile age
+#' @param y regression fit
+#' @param x1 explanatory variable (age + 0.5
+#' @param x2 explanatory variable (x1 ^ 2)
+#' @param x3 explanatory variable (x1 ^ 3)
+#' @param x4 explanatory variable (x1 ^ 4)
+#' @param x5 explanatory variable (x1 ^ 5)
+#' @param age_min minimum fertile age
+#' @param age_max maximum fertile age
 #'
 #' @return
 #' @export
 #' @autoglobal
 #'
-#' @examples
+#' @noRd
 pred_regression <- function(y, x1, x2, x3, x4, x5, age_min, age_max) {
   # fit
   mod_fit <- lm(y ~ x1 + x2 + x3 + x4 + x5)

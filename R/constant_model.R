@@ -1,27 +1,31 @@
-#' constant model
+#' Constant model
 #'
-#' @param points_dat # tibble with model results of previous period by spatial_unit, nat
-#' @param year_begin # begin of prediction
-#' @param year_end # end of prediction
+#' @param in_dat data frame, with model results of the previous period by
+#'  `spatial_unit` and `nat`.
+#' @param year_start numeric, first year of the prediction.
+#' @param year_end numeric, last year of the prediction.
 #'
-#' @return #tibble with prediction data
+#' @return tibble with prediction data
 #' @export
 #' @autoglobal
 #'
-#' @examples
-constant_model <- function(in_dat, year_begin, year_end) {
-  # years: numeric
-  year_begin <- as.numeric(year_begin)
+#' @noRd
+constant_model <- function(
+    in_dat, 
+    year_start, 
+    year_end) {
+  # numeric input
+  year_start <- as.numeric(year_start)
   year_end <- as.numeric(year_end)
 
   # last year of previous model
   last_year <- in_dat |>
-    filter(year == max(year)) |>
-    select(spatial_unit, nat, y)
+    dplyr::filter(year == max(year)) |>
+    dplyr::select(spatial_unit, nat, y)
 
   # prediction
   pred <- tidyr::expand_grid(
-    year = year_begin:year_end,
+    year = year_start:year_end,
     spatial_unit = unique(in_dat$spatial_unit),
     nat = unique(in_dat$nat)
   ) |>

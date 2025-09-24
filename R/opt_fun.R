@@ -1,19 +1,26 @@
-#' optimize the mab function
+#' Optimize the mab-function (`mab_fun()`).
 #'
-#' @param mab_proj objective of the optimization
-#' @param a0 intercept (to be optimized), one value
-#' @param age age (from age_min - 1 until age_max), vector
-#' @param y_no_a0 regression result without intercept, vector
-#' @param maxit maximum iterations (of optim function)
-#' @param abstol absolute tolerance (of optim function)
+#' @param mab_proj numeric, objective mab of the optimization.
+#' @param a0 numeric, intercept (to be optimized).
+#' @param age vector, age (from `age_min` - 1 until `age_max`).
+#' @param y_no_a0 vector, regression result without intercept.
+#' @param maxit numeric, maximum iterations (of optim function).
+#' @param abstol numeric, absolute tolerance (of optim function).
 #'
-#' @return tibble with optimized parameter and objective function
+#' @return tibble with optimized parameter and objective function.
 #' @export
 #' @autoglobal
 #'
-#' @examples
-opt_fun <- function(mab_proj, a0, age, y_no_a0, maxit, abstol) {
-  res <- optim(
+#' @noRd
+opt_fun <- function(
+    mab_proj,
+    a0,
+    age,
+    y_no_a0,
+    maxit,
+    abstol) {
+  # optimize
+  res <- stats::optim(
     par = a0,
     mab_fun,
     age = age,
@@ -26,7 +33,7 @@ opt_fun <- function(mab_proj, a0, age, y_no_a0, maxit, abstol) {
     )
   )
 
-  out <- tibble(
+  out <- tibble::tibble(
     par = res$par,
     value = res$value
   )

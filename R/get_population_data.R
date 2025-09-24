@@ -1,13 +1,15 @@
-#' FSO population (females at 'fertile' age)
+#' Get FSO population (females at 'fertile' age)
 #'
-#' @param number_fso # number of FSO table (STAT-TAB)
-#' @param year_first # first year
-#' @param year_last # last year
-#' @param age_fert_min # minimum age (of 'fertile age')
-#' @param age_fert_max # maximum age (of 'fertile age')
-#' @param spatial_code # official FSO codes, vector
-#' @param spatial_unit # spatial unit names (free choice), vector
-#' @param with_nationality # TRUE (with nationality), FALSE (without nationality)
+#' @param number_fso character, number of FSO table (STAT-TAB)
+#' @param year_first numeric, first year.
+#' @param year_last numeric, last year.
+#' @param age_fert_min numeric, minimum age (of 'fertile age').
+#' @param age_fert_max numeric, maximum age (of 'fertile age').
+#' @param spatial_code character, vector, official FSO codes.
+#' @param spatial_unit character, vector, spatial unit names (free choice).
+#' @param binational boolean, `TRUE` indicates that projections discriminate
+#'        between two groups of nationalities. `FALSE` indicates that the
+#'        projection is run without distinguishing between nationalities.
 #'
 #' @return female population at 'fertile age' at the end of the year,
 #' tibble (spatial_unit, year, age, pop), with or without nat (nationality)
@@ -15,29 +17,52 @@
 #' @autoglobal
 #'
 #' @examples
-# get_population_data(number_fso = "px-x-0102010000_101",
-#         year_first = 2020,
-#         year_last = 2023,
-#         age_fert_min = 15,
-#         age_fert_max = 49,
-#         spatial_code = c("0261", "4566", "0198"),
-#         spatial_unit = c("Stadt Zürich", "Frauenfeld", "Uster"),
-#         with_nationality = TRUE)
-get_population_data <- function(number_fso,
-                                year_first, year_last,
-                                age_fert_min, age_fert_max,
-                                spatial_code, spatial_unit,
-                                with_nationality = TRUE) {
-  # metadata ----------------------------------------------------------------
-
+#' get_population_data(
+#'   number_fso = "px-x-0102010000_101",
+#'   year_first = 2020,
+#'   year_last = 2023,
+#'   age_fert_min = 15,
+#'   age_fert_max = 49,
+#'   spatial_code = c("0261", "4566", "4001"),
+#'   spatial_unit = c("Stadt Zuerich", "Frauenfeld", "Aarau"),
+#'   binational = TRUE
+#' )
+get_population_data <- function(
+    number_fso,
+    year_first, 
+    year_last,
+    age_fert_min, 
+    age_fert_max,
+    spatial_code, 
+    spatial_unit,
+    binational = TRUE) {
+  
+  # arguments
+  assertthat::assert_that(is.character(number_fso),
+    msg = "The argument `number_fso` must be character."
+  )
+  assertthat::assert_that(is.numeric(year_first),
+    msg = "The argument `year_first` must be numeric."
+  )
+  assertthat::assert_that(is.numeric(year_last),
+    msg = "The argument `year_last` must be numeric."
+  )
+  assertthat::assert_that(is.numeric(age_fert_min),
+    msg = "The argument `age_fert_min` must be numeric."
+  )
+  assertthat::assert_that(is.numeric(age_fert_max),
+    msg = "The argument `age_fert_max` must be numeric."
+  )
+  assertthat::assert_that(is.logical(binational),
+    msg = "The argument `binational` must be logical (TRUE or FALSE)."
+  )
+  # Get metadata ------------------------------------------------------------
   fso_metadata <- BFS::bfs_get_metadata(
     number_bfs = number_fso,
     language = "de"
   )
 
-
-  # years -------------------------------------------------------------------
-
+  # Get years ---------------------------------------------------------------
   query_year <- fso_metadata |>
     dplyr::filter(grepl("Jahr", code)) |>
     dplyr::select(code, values, valueTexts) |>
@@ -47,11 +72,10 @@ get_population_data <- function(number_fso,
     dplyr::pull(values)
 
 
-
   # spatial units -----------------------------------------------------------
 
   # lookup: codes and names
-  spatial_lookup <- tibble(
+  spatial_lookup <- tibble::tibble(
     spatial_code = spatial_code,
     spatial_unit = spatial_unit
   )
@@ -72,8 +96,7 @@ get_population_data <- function(number_fso,
     dplyr::pull(values)
 
 
-  # age ---------------------------------------------------------------------
-
+  # Get age -----------------------------------------------------------------
   query_age <- fso_metadata |>
     dplyr::filter(grepl("Alter", code)) |>
     dplyr::select(code, values, valueTexts) |>
@@ -83,8 +106,7 @@ get_population_data <- function(number_fso,
     dplyr::pull(values)
 
 
-  # sex ---------------------------------------------------------------------
-
+  # Get sex -----------------------------------------------------------------
   query_sex <- fso_metadata |>
     dplyr::filter(grepl("Geschlecht", code)) |>
     dplyr::select(code, values, valueTexts) |>
@@ -93,20 +115,20 @@ get_population_data <- function(number_fso,
     dplyr::pull(values)
 
 
-  # nationality -------------------------------------------------------------
+  # Get nationality ---------------------------------------------------------
 
   # nationality lookup
-  nat_lookup <- tibble(
+  nat_lookup <- tibble::tibble(
     nat_code = c("1", "2", "-99999"),
     nat_text = c("ch", "int", "all"),
     nat_fso_text = c(
       "Schweiz", "Ausland",
-      "Staatsangehörigkeit (Kategorie) - Total"
+      stringi::stri_unescape_unicode("Staatsangeh\\u00f6rigkeit (Kategorie) - Total")
     )
   )
 
-  # with nationality? filter and text
-  if (with_nationality) {
+  # binational? filter and text
+  if (isTRUE(binational)) {
     nat_filter <- nat_lookup$nat_code[1:2]
     nat_text <- nat_lookup$nat_text[1:2]
   } else {
@@ -116,28 +138,33 @@ get_population_data <- function(number_fso,
 
   # nationality query
   query_nat <- fso_metadata |>
-    dplyr::filter(grepl("Staatsangehörigkeit", code)) |>
+    dplyr::filter(grepl(stringi::stri_unescape_unicode(
+      "Staatsangeh\\u00f6rigkeit"), 
+      code
+    )) |>
     dplyr::select(code, values, valueTexts) |>
     tidyr::unnest_longer(c(values, valueTexts)) |>
     dplyr::filter(values %in% nat_filter) |>
     dplyr::pull(values)
 
 
-  # population --------------------------------------------------------------
-
+  # Get population ----------------------------------------------------------
   query_pop <- fso_metadata |>
-    dplyr::filter(grepl("Bevölkerungstyp", code)) |>
+    dplyr::filter(grepl(stringi::stri_unescape_unicode(
+      "Bev\\u00f6lkerungstyp"), 
+      code
+    )) |>
     dplyr::select(code, values, valueTexts) |>
     tidyr::unnest_longer(c(values, valueTexts)) |>
-    dplyr::filter(valueTexts == "Ständige Wohnbevölkerung") |>
+    dplyr::filter(valueTexts == stringi::stri_unescape_unicode(
+      "St\\u00E4ndige Wohnbev\\u00f6lkerung"
+    )) |>
     dplyr::pull(values)
 
 
-
   # query -------------------------------------------------------------------
-
   # query parameters
-  query_para <- structure(
+  query_parameter <- structure(
     list(
       query_year,
       query_spatial,
@@ -149,8 +176,8 @@ get_population_data <- function(number_fso,
     names = c(
       "Jahr",
       "Kanton (-) / Bezirk (>>) / Gemeinde (......)",
-      "Bevölkerungstyp",
-      "Staatsangehörigkeit (Kategorie)",
+      stringi::stri_unescape_unicode("Bev\\u00f6lkerungstyp"),
+      stringi::stri_unescape_unicode("Staatsangeh\\u00f6rigkeit (Kategorie)"),
       "Geschlecht",
       "Alter"
     )
@@ -160,26 +187,34 @@ get_population_data <- function(number_fso,
   fso_data_import <- BFS::bfs_get_data(
     number_bfs = number_fso,
     language = "de",
-    query = query_para
+    query = query_parameter
   )
 
-
   # output ------------------------------------------------------------------
-
   # fso population
   fso_pop <- fso_data_import |>
-    dplyr::left_join(spatial_selected, by = c("Kanton (-) / Bezirk (>>) / Gemeinde (......)" = "valueTexts")) |>
-    dplyr::left_join(nat_lookup, by = c("Staatsangehörigkeit (Kategorie)" = "nat_fso_text")) |>
+    dplyr::left_join(
+      spatial_selected,
+      by = c("Kanton (-) / Bezirk (>>) / Gemeinde (......)" = "valueTexts")
+    ) |>
+    dplyr::left_join(
+      nat_lookup |> 
+        dplyr::rename(!!stringi::stri_unescape_unicode(
+          "Staatsangeh\\u00f6rigkeit (Kategorie)") := nat_fso_text
+      )
+    ) |>
     dplyr::mutate(
       year = as.numeric(Jahr),
       age = as.numeric(substr(Alter, 1, 2))
     ) |>
-    rename(
-      pop = `Ständige und nichtständige Wohnbevölkerung`,
+    dplyr::rename(
+      pop = stringi::stri_unescape_unicode(
+        "St\\u00E4ndige und nichtst\\u00E4ndige Wohnbev\\u00f6lkerung"
+      ),
       nat = nat_text
     ) |>
-    select(spatial_unit, year, nat, age, pop) |>
-    arrange(spatial_unit, year, nat, age)
+    dplyr::select(year, spatial_unit, nat, age, n_pop = pop) |>
+    dplyr::arrange(spatial_unit, year, nat, age)
 
 
   # output

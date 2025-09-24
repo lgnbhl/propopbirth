@@ -1,19 +1,24 @@
-#' trend prediction with linear model
+#' Trend prediction with linear model.
 #'
-#' @param input_lm # tibble with variables year, y, spatial_unit, nat
-#' @param year_begin # begin of prediction
-#' @param year_end # end of prediction
-#' @param trend_past # amount of past years that are used to fit the model
-#' @param trend_prop # y value of the end point: proportion of trend vs. past
+#' @param input_lm data frame with variables `year`, `y`, `spatial_unit`, `nat`.
+#' @param year_start numeric, start of prediction.
+#' @param year_end numeric, end of prediction.
+#' @param trend_past numeric, number of past years that are used to fit the model.
+#' @param trend_prop numeric, y value of the end point: proportion of trend vs. past.
 #'
-#' @return #tibble with prediction data
+#' @return tibble with prediction data
 #' @export
 #' @autoglobal
 #'
-#' @examples
-trend_lm <- function(input_lm, year_begin, year_end, trend_past, trend_prop) {
-  # years: numeric
-  year_begin <- as.numeric(year_begin)
+#' @noRd
+trend_lm <- function(
+    input_lm,
+    year_start,
+    year_end,
+    trend_past,
+    trend_prop) {
+  # numeric input
+  year_start <- as.numeric(year_start)
   year_end <- as.numeric(year_end)
   trend_past <- as.numeric(trend_past)
   trend_prop <- as.numeric(trend_prop)
@@ -29,14 +34,26 @@ trend_lm <- function(input_lm, year_begin, year_end, trend_past, trend_prop) {
     dplyr::filter(year >= max(year) - trend_past + 1)
 
   # fit the model
-  lm_fit <- lm(y ~ year * spatial_unit * nat, data = in_dat)
+  # several options for the lm function depending on the existence of several
+  # factor levels (e.g. if only one spatial unit is present, the variable will
+  # not be considered in the lm)
+  if (length(unique(in_dat$spatial_unit)) > 1 & length(unique(in_dat$nat)) > 1) {
+    lm_fit <- lm(y ~ year * spatial_unit * nat, data = in_dat)
+  } else if (length(unique(in_dat$spatial_unit)) > 1) {
+    lm_fit <- lm(y ~ year * spatial_unit, data = in_dat)
+  } else if (length(unique(in_dat$nat)) > 1) {
+    lm_fit <- lm(y ~ year * nat, data = in_dat)
+  } else {
+    lm_fit <- lm(y ~ year, data = in_dat)
+  }
 
   # prediction (on purpose until the end of the temporal forecast)
   new_data <- tidyr::expand_grid(
-    year = year_begin:year_end,
+    year = year_start:year_end,
     spatial_unit = unique(in_dat$spatial_unit),
     nat = unique(in_dat$nat)
   )
+  
   lm_pred <- new_data |>
     dplyr::mutate(
       y_pred = pmax(0, predict(lm_fit, newdata = new_data)),

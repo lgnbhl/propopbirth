@@ -1,11 +1,11 @@
 Package: propopbirth
-Title: What the Package Does (One Line, Title Case)
+Title: Birth rate forecast based on the FSO methodology
 Version: 0.1.0
 Authors@R: c(
     person(
       "Klemens", "Rosin", 
       email = "klemens.rosin@zuerich.ch",
-      role = c("aut", "cre")
+      role = "aut"
     ),
     person(
       "Felix", "Lorenz",
@@ -15,20 +15,30 @@ Authors@R: c(
     person(
       "Norah", "Efosa",
       email = "norah.efosa@ag.ch",
-      role = "ctb"
+      role = c("aut", "cre")
     )
   )
-Description: What the package does (one paragraph).
+Description: First, model input data are calculated. Second, TFR (total fertility 
+    rate) and MAB (mean age of the mother at birth) are predicted. Third, TFR 
+    and MAB forecasts are used to predict the age-specific birth rates.
 URL: Set URL
 License: GPL (>= 3)
 Depends: 
     R (>= 2.10)
 Imports:
   dplyr,
-  tibble
+  tibble,
+  forecast,
+  BFS,
+  assertthat,
+  ggplot2,
+  tidyr,
+  purrr,
+  stats
 Suggests: 
     knitr,
     rmarkdown,
+    DT,
     testthat (>= 3.0.0)
 Encoding: UTF-8
 Roxygen: list( markdown = TRUE, roclets = c("collate", "namespace", "rd",

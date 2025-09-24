@@ -6,6 +6,16 @@ utils::globalVariables(c(
   "nat", # <constant_model>
   "y", # <constant_model>
   "category", # <constant_model>
+  "n_pop", # <create_input_data>
+  "year", # <create_input_data>
+  "age", # <create_input_data>
+  "spatial_unit", # <create_input_data>
+  "year_next", # <create_input_data>
+  "age_next", # <create_input_data>
+  "nat", # <create_input_data>
+  "pop_previous", # <create_input_data>
+  "pop", # <create_input_data>
+  "n_birth", # <create_input_data>
   "spatial_unit", # <forecast_fertility_rate>
   "nat", # <forecast_fertility_rate>
   "fer", # <forecast_fertility_rate>
@@ -39,27 +49,15 @@ utils::globalVariables(c(
   "category", # <forecast_tfr_mab>
   "y_end", # <forecast_tfr_mab>
   ":=", # <forecast_tfr_mab>
-  "res_mun", # <get_birth_data>
-  "year", # <get_birth_data>
-  "age", # <get_birth_data>
-  "nat", # <get_birth_data>
-  "bir", # <get_birth_data>
-  "year", # <get_input_data>
-  "age", # <get_input_data>
-  "spatial_unit", # <get_input_data>
-  "year_next", # <get_input_data>
-  "age_next", # <get_input_data>
-  "nat", # <get_input_data>
-  "pop_previous", # <get_input_data>
-  "birth_rate", # <get_input_data>
   "code", # <get_population_data>
   "values", # <get_population_data>
   "valueTexts", # <get_population_data>
   "year_num", # <get_population_data>
   "age_num", # <get_population_data>
+  ":=", # <get_population_data>
+  "nat_fso_text", # <get_population_data>
   "Jahr", # <get_population_data>
   "Alter", # <get_population_data>
-  "Ständige und nichtständige Wohnbevölkerung", # <get_population_data>
   "year", # <get_population_data>
   "nat", # <get_population_data>
   "age", # <get_population_data>
