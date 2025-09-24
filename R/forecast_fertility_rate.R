@@ -1,9 +1,9 @@
-#' Forecast age-specific fertility rates
+#' Forecast age-specific fertility rates.
 #'
 #' @param fer_dat fertility data, tibble with variables spatial_unit, nat, age, fer
 #' @param tfr_dat tfr data, tibble with variables spatial_unit, nat, year, tfr
 #' @param mab_dat mab data, tibble with variables spatial_unit, nat, year, mab
-#' @param year_begin forecast begin
+#' @param year_start forecast begin
 #' @param year_end forecast end
 #' @param maxit maximum iterations of optimization
 #' @param abstol absolute tolerance of optimization
@@ -13,13 +13,14 @@
 #' @autoglobal
 #'
 #' @examples
-forecast_fertility_rate <- function(fer_dat,
-                                    tfr_dat,
-                                    mab_dat,
-                                    year_begin,
-                                    year_end,
-                                    maxit = 1000,
-                                    abstol = 0.001) {
+forecast_fertility_rate <- function(
+    fer_dat,
+    tfr_dat,
+    mab_dat,
+    year_start,
+    year_end,
+    maxit = 1000,
+    abstol = 0.001) {
   # fertility rate: regression for last data year ---------------------------
 
   # minimum fertility (without zero)
@@ -95,7 +96,7 @@ forecast_fertility_rate <- function(fer_dat,
 
   # optimization
   mab_opt <- mab_dat |>
-    dplyr::filter(year >= year_begin) |>
+    dplyr::filter(year >= year_start) |>
     dplyr::select(year, spatial_unit, nat, mab) |>
     dplyr::left_join(input_reg, by = c("spatial_unit", "nat"), relationship = "many-to-many") |>
     dplyr::arrange(year, spatial_unit, nat, age) |>
@@ -154,7 +155,7 @@ forecast_fertility_rate <- function(fer_dat,
 
   # fertility rate (without standardization, 'birth rate': same name as in propop)
   birth_rate <- tfr_dat |>
-    filter(year >= year_begin) |>
+    filter(year >= year_start) |>
     right_join(fer_rate_sta, by = c("year", "spatial_unit", "nat")) |>
     mutate(birth_rate = fer_rate_sta * tfr) |>
     select(spatial_unit, nat, year, age, birth_rate) |>
