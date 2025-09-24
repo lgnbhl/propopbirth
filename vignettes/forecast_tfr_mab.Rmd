@@ -36,6 +36,8 @@ knitr::include_graphics("figures/time_periods.png")
 
 In the original FSO model, for the trend model an **ARIMA model** is used for the trend period. Depending on the structure of the past TFR and MAB data, the ARIMA forecast is not always stable. Therefore, in `{propopbirth}` a **linear model** can be used as an alternative to the ARIMA model.
 
+If an `lm` model is used, the window of past years (`trend_past`) and the proportional amount of past years used to fit the model (`trend_prop`) can be specified.This allows for weighted or selective emphasis on recent data when calculating the trend, which can be useful if trends are expected to change over time or if older data is considered less relevant.
+
 +------------+------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | module     | description                                                                              | values required                                                                                                                                                             |
 +============+==========================================================================================+=============================================================================================================================================================================+
@@ -149,27 +151,10 @@ library(tidyverse)
 Create input data
 
 ```{r, echo = TRUE}
-fso_bir <- fso_birth |>
-  dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich"))
-```
-
-```{r, echo = TRUE, eval=TRUE}
-fso_pop <- get_population_data(
-  number_fso = "px-x-0102010000_101",
-  year_first = 2010,
-  year_last = 2023,
-  age_fert_min = 15,
-  age_fert_max = 49,
-  spatial_code = c("0198", "4566", "0261"),
-  spatial_unit = c("Aarau", "Frauenfeld", "Stadt Zürich"),
-  binational = TRUE
-)
-```
-
-```{r, echo = TRUE}
 input <- create_input_data(
   population = fso_pop,
-  births = fso_bir,
+  births = fso_birth |> 
+   dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich")) ,
   year_first = 2011,
   year_last = 2023,
   age_fert_min = 15,
@@ -204,15 +189,17 @@ TFR forecast
 ```{r, echo = TRUE}
 forecast_tfr_example1 <- forecast_tfr_mab(
   topic = "tfr", 
-  input_dataset = input$tfr,
-  trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
+  topic_data = input$tfr,
+  trend_model = c(
+    model = "lm", start = 2024, end = 2026, trend_past = 7, trend_prop = 0.5
+  ),
   temporal_model = c(
-    "cubic", 2027, 2055, trend_prop = 0.8, z0_prop = 0.7, z1_prop = 0
+    model = "cubic", start = 2027, end = 2055, trend_prop = 0.8, z0_prop = 0.7, 
+    z1_prop = 0
   ),
   temporal_end = NA,
-  constant_model = c("constant", 2056, 2075)
-  ) 
-
+  constant_model = c(model = "constant", start = 2056, end = 2075)
+) 
 ```
 
 ```{r, fig.width=7, fig.height=5}
@@ -235,13 +222,16 @@ ggplot(forecast_tfr_example1) +
 ```{r, echo = TRUE}
 forecast_tfr_example2 <- forecast_tfr_mab(
   topic = "tfr", 
-  input_dataset = input$tfr,
-  trend_model = c("ARIMA", 2024, 2026, trend_past = 7, trend_prop = 0.5),
+  topic_data = input$tfr,
+  trend_model = c(
+    model = "ARIMA", start = 2024, end = 2026, trend_past = 7, trend_prop = 0.5
+  ),
   temporal_model = c(
-    "Bezier", 2027, 2055, trend_prop = 0.8, z0_prop = 0.7, z1_prop = 0
+    model = "Bezier", start = 2027, end = 2055, trend_prop = 0.8, z0_prop = 0.7, 
+    z1_prop = 0
   ),
   temporal_end = NA,
-  constant_model = c("constant", 2056, 2075)
+  constant_model = c(model = "constant", start = 2056, end = 2075)
   ) 
 
 ```
@@ -263,21 +253,23 @@ ggplot(forecast_tfr_example2) +
 
 -   temporal model: **Bézier**
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, eval = FALSE}
 forecast_tfr_example3 <- forecast_tfr_mab(
   topic = "mab", 
-  input_dataset = input$mab,
-  trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
+  topic_data = input$mab,
+  trend_model = c(
+    model = "lm", start = 2024, end = 2026, trend_past = 7, trend_prop = 0.5
+  ),
   temporal_model = c(
-    "Bezier", 2027, 2055, trend_prop = 0.3, z0_prop = 0.7, z1_prop = 0
+    model = "Bezier", start = 2027, end = 2055, trend_prop = 0.3, z0_prop = 0.7, 
+    z1_prop = 0
   ),
   temporal_end = NA,
-  constant_model = c("constant", 2056, 2075)
-  ) 
-
+  constant_model = c(model = "constant", start = 2056, end = 2075)
+) 
 ```
 
-```{r, fig.width=7, fig.height=5}
+```{r, fig.width=7, fig.height=5, eval = FALSE}
 ggplot(forecast_tfr_example3) +
   geom_line(aes(x = year, y = mab, color = category)) +
   geom_point(aes(x = year, y = mab, color = category)) +

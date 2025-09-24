@@ -1,19 +1,22 @@
-#' temporal model: Bézier
+#' Temporal model: Bézier
 #'
-#' @param points_dat tibble with point information (x0, y0, z0, x1, y1, z1) by spatial_unit, nat
-#' @param year_begin begin of prediction
-#' @param year_end end of prediction
+#' @param points_dat data frame, with point information (`x0`, `y0`, `z0`, `x1`, 
+#'        `y1`, `z1`) by `spatial_unit`, `nat`.
+#' @param year_start numeric, start of prediction.
+#' @param year_end numeric, end of prediction.
 #'
 #' @return tibble with prediction data
 #' @export
 #' @autoglobal
 #'
 #' @examples
-temporal_Bezier <- function(points_dat, year_begin, year_end) {
+temporal_Bezier <- function(
+    points_dat,
+    year_start,
+    year_end) {
   # parameters
-
-  # years: numeric
-  year_begin <- as.numeric(year_begin)
+  # numeric input
+  year_start <- as.numeric(year_start)
   year_end <- as.numeric(year_end)
 
   Bezier_para <- points_dat |>
@@ -25,7 +28,7 @@ temporal_Bezier <- function(points_dat, year_begin, year_end) {
 
   # prediction
   pred <- tidyr::expand_grid(
-    year = year_begin:year_end,
+    year = year_start:year_end,
     spatial_unit = unique(points_dat$spatial_unit),
     nat = unique(points_dat$nat)
   ) |>

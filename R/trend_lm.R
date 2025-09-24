@@ -1,19 +1,24 @@
-#' trend prediction with linear model
+#' Trend prediction with linear model.
 #'
-#' @param input_lm tibble with variables year, y, spatial_unit, nat
-#' @param year_begin begin of prediction
-#' @param year_end end of prediction
-#' @param trend_past amount of past years that are used to fit the model
-#' @param trend_prop y value of the end point: proportion of trend vs. past
+#' @param input_lm data frame with variables `year`, `y`, `spatial_unit`, `nat`.
+#' @param year_start numeric, start of prediction.
+#' @param year_end numeric, end of prediction.
+#' @param trend_past numeric, number of past years that are used to fit the model.
+#' @param trend_prop numeric, y value of the end point: proportion of trend vs. past.
 #'
 #' @return tibble with prediction data
 #' @export
 #' @autoglobal
 #'
 #' @examples
-trend_lm <- function(input_lm, year_begin, year_end, trend_past, trend_prop) {
-  # years: numeric
-  year_begin <- as.numeric(year_begin)
+trend_lm <- function(
+    input_lm,
+    year_start,
+    year_end,
+    trend_past,
+    trend_prop) {
+  # numeric input
+  year_start <- as.numeric(year_start)
   year_end <- as.numeric(year_end)
   trend_past <- as.numeric(trend_past)
   trend_prop <- as.numeric(trend_prop)
@@ -33,7 +38,7 @@ trend_lm <- function(input_lm, year_begin, year_end, trend_past, trend_prop) {
 
   # prediction (on purpose until the end of the temporal forecast)
   new_data <- tidyr::expand_grid(
-    year = year_begin:year_end,
+    year = year_start:year_end,
     spatial_unit = unique(in_dat$spatial_unit),
     nat = unique(in_dat$nat)
   )
