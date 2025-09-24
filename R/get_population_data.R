@@ -37,7 +37,6 @@ get_population_data <- function(
     spatial_unit,
     binational = TRUE) {
   
-  
   # arguments
   assertthat::assert_that(is.character(number_fso),
     msg = "The argument `number_fso` must be character."
@@ -124,7 +123,7 @@ get_population_data <- function(
     nat_text = c("ch", "int", "all"),
     nat_fso_text = c(
       "Schweiz", "Ausland",
-      "Staatsangehörigkeit (Kategorie) - Total"
+      stringi::stri_unescape_unicode("Staatsangeh\\u00f6rigkeit (Kategorie) - Total")
     )
   )
 
@@ -139,7 +138,10 @@ get_population_data <- function(
 
   # nationality query
   query_nat <- fso_metadata |>
-    dplyr::filter(grepl("Staatsangehörigkeit", code)) |>
+    dplyr::filter(grepl(stringi::stri_unescape_unicode(
+      "Staatsangeh\\u00f6rigkeit"), 
+      code
+    )) |>
     dplyr::select(code, values, valueTexts) |>
     tidyr::unnest_longer(c(values, valueTexts)) |>
     dplyr::filter(values %in% nat_filter) |>
@@ -148,10 +150,15 @@ get_population_data <- function(
 
   # Get population ----------------------------------------------------------
   query_pop <- fso_metadata |>
-    dplyr::filter(grepl("Bevölkerungstyp", code)) |>
+    dplyr::filter(grepl(stringi::stri_unescape_unicode(
+      "Bev\\u00f6lkerungstyp"), 
+      code
+    )) |>
     dplyr::select(code, values, valueTexts) |>
     tidyr::unnest_longer(c(values, valueTexts)) |>
-    dplyr::filter(valueTexts == "Ständige Wohnbevölkerung") |>
+    dplyr::filter(valueTexts == stringi::stri_unescape_unicode(
+      "St\\u00E4ndige Wohnbev\\u00f6lkerung"
+    )) |>
     dplyr::pull(values)
 
 
@@ -169,8 +176,8 @@ get_population_data <- function(
     names = c(
       "Jahr",
       "Kanton (-) / Bezirk (>>) / Gemeinde (......)",
-      "Bevölkerungstyp",
-      "Staatsangehörigkeit (Kategorie)",
+      stringi::stri_unescape_unicode("Bev\\u00f6lkerungstyp"),
+      stringi::stri_unescape_unicode("Staatsangeh\\u00f6rigkeit (Kategorie)"),
       "Geschlecht",
       "Alter"
     )
@@ -183,7 +190,6 @@ get_population_data <- function(
     query = query_parameter
   )
 
-
   # output ------------------------------------------------------------------
   # fso population
   fso_pop <- fso_data_import |>
@@ -192,15 +198,19 @@ get_population_data <- function(
       by = c("Kanton (-) / Bezirk (>>) / Gemeinde (......)" = "valueTexts")
     ) |>
     dplyr::left_join(
-      nat_lookup,
-      by = c("Staatsangehörigkeit (Kategorie)" = "nat_fso_text")
+      nat_lookup |> 
+        dplyr::rename(!!stringi::stri_unescape_unicode(
+          "Staatsangeh\\u00f6rigkeit (Kategorie)") := nat_fso_text
+      )
     ) |>
     dplyr::mutate(
       year = as.numeric(Jahr),
       age = as.numeric(substr(Alter, 1, 2))
     ) |>
     dplyr::rename(
-      pop = `Ständige und nichtständige Wohnbevölkerung`,
+      pop = stringi::stri_unescape_unicode(
+        "St\\u00E4ndige und nichtst\\u00E4ndige Wohnbev\\u00f6lkerung"
+      ),
       nat = nat_text
     ) |>
     dplyr::select(year, spatial_unit, nat, age, n_pop = pop) |>
