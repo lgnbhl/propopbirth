@@ -1,6 +1,9 @@
 ---
 title: "Prepare input data"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 2
 vignette: >
   %\VignetteIndexEntry{Prepare input data}
   %\VignetteEncoding{UTF-8}
@@ -8,6 +11,12 @@ vignette: >
 editor_options: 
   chunk_output_type: console
 ---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(propopbirth)
+library(tidyverse)
+```
 
 ## Overview
 
@@ -18,12 +27,6 @@ Here the **birth rate forecast** according to the **methodology of the FSO** (Fe
 -   **fertility rate** per age year
 
 If the final forecast should distinguish by **nationality** and/or **spatial unit**, the three input data sets must also be differentiated according to these variables.
-
-```{r setup, message=FALSE, warning=FALSE}
-library(ggplot2)
-library(propopbirth)
-library(tidyverse)
-```
 
 ## Required data
 
@@ -60,10 +63,8 @@ Currently, the FSO does not publish historical births data as open data. However
 The data for three selected municipalities looks like this:
 
 ```{r, echo = TRUE}
-fso_bir <- fso_birth |>
-  dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich"))
-
-fso_bir |> 
+fso_birth |> 
+  dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich")) |> 
   DT::datatable(options = list(pageLength = 5))
 ```
 
@@ -78,7 +79,7 @@ fso_pop <- get_population_data(
   year_last = 2023,
   age_fert_min = 15,
   age_fert_max = 49,
-  spatial_code = c("0198", "4566", "0261"),
+  spatial_code = c("4001", "4566", "0261"),
   spatial_unit = c("Aarau", "Frauenfeld", "Stadt Zürich"),
   binational = TRUE
 )
@@ -106,7 +107,8 @@ The parameter `fert_hist_years` determines how many years are used to calculate 
 ```{r}
 input <- create_input_data(
   population = fso_pop,
-  births = fso_bir,
+  births = fso_birth |> 
+    dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich")),
   year_first = 2011,
   year_last = 2023,
   age_fert_min = 15,
@@ -121,7 +123,8 @@ input <- create_input_data(
 ```{r, fig.width=7, fig.height=3}
 ggplot(input$tfr) +
   geom_line(aes(x = year, y = tfr, color = nat)) +
-  facet_wrap(~ spatial_unit)
+  facet_wrap(~ spatial_unit) +
+  theme_minimal()
 ```
 
 ```{r}
@@ -134,7 +137,8 @@ input$tfr |>
 ```{r, fig.width=7, fig.height=3}
 ggplot(input$mab) +
   geom_line(aes(x = year, y = mab, color = nat)) +
-  facet_wrap(~ spatial_unit)
+  facet_wrap(~ spatial_unit)+
+  theme_minimal()
 ```
 
 ```{r}
@@ -147,7 +151,8 @@ input$mab |>
 ```{r, fig.width=7, fig.height=3}
 ggplot(input$fer) +
   geom_line(aes(x = age, y = fer, color = nat)) +
-  facet_wrap(~ spatial_unit)
+  facet_wrap(~ spatial_unit)+
+  theme_minimal()
 ```
 
 ```{r}
