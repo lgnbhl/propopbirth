@@ -30,10 +30,15 @@ Imports:
   tibble,
   forecast,
   BFS,
-  assertthat
+  assertthat,
+  ggplot2,
+  tidyr,
+  purrr,
+  stats
 Suggests: 
     knitr,
     rmarkdown,
+    DT,
     testthat (>= 3.0.0)
 Encoding: UTF-8
 Roxygen: list( markdown = TRUE, roclets = c("collate", "namespace", "rd",
