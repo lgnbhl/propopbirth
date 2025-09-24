@@ -2,36 +2,37 @@
 % Please edit documentation in R/forecast_fertility_rate.R
 \name{forecast_fertility_rate}
 \alias{forecast_fertility_rate}
-\title{Forecast age-specific fertility rates}
+\title{Forecast age-specific fertility rates.}
 \usage{
 forecast_fertility_rate(
   fer_dat,
   tfr_dat,
   mab_dat,
-  year_begin,
+  year_start,
   year_end,
   maxit = 1000,
   abstol = 0.001
 )
 }
 \arguments{
-\item{fer_dat}{fertility data, tibble with variables spatial_unit, nat, age, fer}
+\item{fer_dat}{data frame, fertility data, tibble with variables \code{spatial_unit},
+\code{nat}, \code{age}, \code{fer}.}
 
-\item{tfr_dat}{tfr data, tibble with variables spatial_unit, nat, year, tfr}
+\item{tfr_dat}{tfr data, tibble with variables \code{spatial_unit}, \code{nat}, \code{year}, \code{tfr}.}
 
-\item{mab_dat}{mab data, tibble with variables spatial_unit, nat, year, mab}
+\item{mab_dat}{mab data, tibble with variables \code{spatial_unit}, \code{nat}, \code{year}, \code{mab}.}
 
-\item{year_begin}{forecast begin}
+\item{year_start}{numeric, start of prediction.}
 
-\item{year_end}{forecast end}
+\item{year_end}{numeric, end of prediction.}
 
-\item{maxit}{maximum iterations of optimization}
+\item{maxit}{numeric, maximum iterations of optimization.}
 
-\item{abstol}{absolute tolerance of optimization}
+\item{abstol}{numeric, absolute tolerance of optimization.}
 }
 \value{
-birth rate, tibble with variables spatial_unit, nat, age, birth_rate
+birth rate, tibble with variables \code{spatial_unit}, \code{nat}, \code{age}, \code{birth_rate}.
 }
 \description{
-Forecast age-specific fertility rates
+Forecast age-specific fertility rates.
 }

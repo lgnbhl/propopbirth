@@ -13,7 +13,7 @@
 #' @export
 #' @autoglobal
 #'
-#' @examples
+#' @noRd
 temporal_points <- function(
     input_past, 
     input_trend, 
@@ -45,7 +45,7 @@ temporal_points <- function(
     dplyr::arrange(spatial_unit, nat, year) |>
     dplyr::left_join(past_last, by = c("spatial_unit", "nat")) |>
     dplyr::mutate(
-      y_new = pmax(0, if_else(year <= year_start, y,
+      y_new = pmax(0, dplyr::if_else(year <= year_start, y,
         y_past_last + trend_prop * (y - y_past_last)
       )),
       delta_y = c(NA, diff(y_new)),

@@ -2,11 +2,11 @@
 % Please edit documentation in R/forecast_tfr_mab.R
 \name{forecast_tfr_mab}
 \alias{forecast_tfr_mab}
-\title{forecast tfr or mab}
+\title{Forecast total fertility rate (TFR) or mean age of the mother at birth (MAB)}
 \usage{
 forecast_tfr_mab(
   topic,
-  input_dataset,
+  topic_data,
   trend_model,
   temporal_model,
   temporal_end = NA,
@@ -14,22 +14,31 @@ forecast_tfr_mab(
 )
 }
 \arguments{
-\item{topic}{tfr or mab}
+\item{topic}{character, defines the parameter to calculate (\code{tfr} or \code{mab}).}
 
-\item{input_dataset}{input tibble with variables: spatial_unit, nat, year, y (tfr or mab)}
+\item{topic_data}{data frame, input data tailored to the topic with variables:
+\code{spatial_unit}, \code{nat}, \code{year}, either \code{tfr} or \code{mab}. This data is
+obtained by the function \code{create_input_data()}. Columns for
+\code{spatial_unit} and/or \code{nat} are optional.}
 
-\item{trend_model}{model type (ARIMA or lm), begin, end, amount of years used to fit the lm model}
+\item{trend_model}{vector, specifies the model type (\code{ARIMA} or \code{lm}), the
+first (\code{start}) and last (\code{end}) year. If an \code{lm} model is used, the
+window of past years (\code{trend_past}) and the proportional amount of
+past years used to fit the model (\code{trend_prop}) can be specified.}
 
-\item{temporal_model}{model type (cubic, Bezier or constant), begin, end,
-proportion of trend used, proportion slopes used,}
+\item{temporal_model}{vector, model type (\code{cubic}, \code{Bezier} or \code{constant}),
+first and last year, proportion of trend (\code{trend_prop}), proportion
+for slopes (\code{z0_prop}) and proportion of the slope at the end point
+(\code{z1_prop}).}
 
-\item{temporal_end}{tibble with given y-values at the end of the temporal forecast period}
+\item{temporal_end}{data frame, contains y-values at the end of the temporal
+forecast period (\code{y_end}).}
 
-\item{constant_model}{model type (constant), begin, end}
+\item{constant_model}{model type (\code{constant}), first and last year.}
 }
 \value{
-predictions (tibble)
+data frame, predictions for either \code{tfr} or \code{mab}.
 }
 \description{
-forecast tfr or mab
+Forecast total fertility rate (TFR) or mean age of the mother at birth (MAB)
 }

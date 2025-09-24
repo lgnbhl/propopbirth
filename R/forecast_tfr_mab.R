@@ -50,13 +50,117 @@ forecast_tfr_mab <- function(
   assertthat::assert_that(is.numeric(topic_data[[topic]]),
     msg = paste0("Column `", topic, "` in `topic_data` must be numeric.")
   )
+  assertthat::assert_that("spatial_unit" %in% names(topic_data),
+    msg = "Column `spatial_unit` is missing in `topic_data`."
+  )
   assertthat::assert_that(is.character(topic_data$spatial_unit),
     msg = "Column `spatial_unit` in `topic_data` must be character."
+  )
+  assertthat::assert_that("nat" %in% names(topic_data),
+    msg = "Column `nat` is missing in `topic_data`."
   )
   assertthat::assert_that(is.character(topic_data$nat),
     msg = "Column `nat` in `topic_data` must be character."
   )
-
+  ## trend model ------------------------------------------------------------
+  assertthat::assert_that("model" %in% names(trend_model),
+    msg = "Please specify a `trend_model` (model = `lm` or model = `ARIMA`)."
+  )
+  assertthat::assert_that(is.character(trend_model["model"]),
+    msg = "The model specified in `trend_model` must be character."
+  )
+  assertthat::assert_that("start" %in% names(trend_model),
+    msg = "Please specify a start year in the `trend_model` (e.g. start = 2020)."
+  )
+  assertthat::assert_that("end" %in% names(trend_model),
+    msg = "Please specify the last year in the `trend_model` (e.g. end = 2020)."
+  )
+  assertthat::assert_that("trend_past" %in% names(trend_model),
+    msg = paste0(
+      "Please specify the number of years from the past for the `trend_model` ",
+      "(e.g. trend_past = 7)."
+    )
+  )
+  assertthat::assert_that("trend_prop" %in% names(trend_model),
+    msg = paste0(
+      "Please specify the proportional amount of past years used to fit the ",
+      "`trend_model` (e.g. trend_prop = 0.5)."
+    )
+  )
+  ## temporal model ---------------------------------------------------------
+  assertthat::assert_that("model" %in% names(temporal_model),
+    msg = paste0(
+      "Please specify a `temporal_model` (model = `lm` / `ARIMA` / `cubic` / ",
+      "`Bezier` / `constant`)."
+    )
+  )
+  assertthat::assert_that(is.character(temporal_model["model"]),
+    msg = "The model specified in `temporal_model` must be character."
+  )
+  assertthat::assert_that("start" %in% names(temporal_model),
+    msg = "Please specify a start year in the `temporal_model` (e.g. `start` = 2020)."
+  )
+  assertthat::assert_that("end" %in% names(temporal_model),
+    msg = "Please specify the last year in the `temporal_model` (e.g. `end` = 2020)."
+  )
+  assertthat::assert_that("trend_prop" %in% names(temporal_model),
+    msg = paste0(
+      "Please specify the proportional amount of past years used to fit the ",
+      "`temporal_model` (e.g. `trend_prop` = 0.5)."
+   )
+  )
+  assertthat::assert_that("z0_prop" %in% names(temporal_model),
+    msg = paste0(
+      "Please specify the proportion for slopes used to fit the `temporal_model` ",
+      "(e.g. `z0_prop` = 0.7)."
+    )
+  )
+  assertthat::assert_that("z0_prop" %in% names(temporal_model),
+    msg = paste0(
+      "Please specify the proportion of the slope at the end point used to fit ",
+      "the `temporal_model` (e.g. `z1_prop` = 0)."
+    )
+  )
+  ## constant model ---------------------------------------------------------
+  assertthat::assert_that("model" %in% names(constant_model),
+    msg = "Please specify a `constant_model` (model = `constant`)."
+  )
+  assertthat::assert_that(is.character(constant_model["model"]),
+    msg = "The model specified in `constant_model` must be character."
+  )
+  assertthat::assert_that("start" %in% names(constant_model),
+    msg = "Please specify a start year in the `constant_model` (e.g. start = 2020)."
+  )
+  assertthat::assert_that("end" %in% names(constant_model),
+    msg = "Please specify the last year in the `constant_model` (e.g. `end` = 2020)."
+  )
+  ## temporal end -----------------------------------------------------------
+  if (length(temporal_end) > 1) {
+  # convert to tibble if another table format is provided
+  temporal_end <- as_tibble(temporal_end)
+  
+  assertthat::assert_that(is_tibble_with_cols(temporal_end),
+    msg = paste0(
+      "Please provide `temporal_end` in a format that can be converted into ",
+      "a tibble, such as a data frame or datatable."
+    )
+  )
+  assertthat::assert_that(
+    isTRUE(all(unique(topic_data$spatial_unit) == unique(temporal_end$spatial_unit))),
+    msg = paste0(
+      "Spatial units specified in the `temporal_end` data must be identical ",
+      "to the levels of spatial units in `topic_data`."
+    )
+  )
+  assertthat::assert_that(
+    isTRUE(all(unique(topic_data$nat) == unique(temporal_end$nat))),
+    msg = paste0(
+      "Nationalities specified in the `temporal_end` data must be identical ",
+      "to the levels of nationalities in `topic_data`."
+    )
+  )
+  }
+  
   # topic -------------------------------------------------------------------
   # rename topic-column (either `tfr` or `mab`) to column `y`.
   input_data <- topic_data |>

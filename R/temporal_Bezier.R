@@ -9,7 +9,7 @@
 #' @export
 #' @autoglobal
 #'
-#' @examples
+#' @noRd
 temporal_Bezier <- function(
     points_dat,
     year_start,
@@ -21,7 +21,7 @@ temporal_Bezier <- function(
 
   Bezier_para <- points_dat |>
     dplyr::mutate(
-      delta_z = if_else(z0 - z1 == 0, 0.000000001, z0 - z1),
+      delta_z = dplyr::if_else(z0 - z1 == 0, 0.000000001, z0 - z1),
       xc = ((x0 * z0) - (x1 * z1) + y1 - y0) / delta_z,
       yc = ((y1 * z0) - (y0 * z1) + (z0 * z1 * (x0 - x1))) / delta_z
     )

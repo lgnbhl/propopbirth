@@ -10,7 +10,7 @@
 #' @export
 #' @autoglobal
 #'
-#' @examples
+#' @noRd
 trend_arima <- function(
     year,
     y,

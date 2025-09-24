@@ -9,7 +9,7 @@
 #' @export
 #' @autoglobal
 #'
-#' @examples
+#' @noRd
 temporal_constant <- function(
     points_dat,
     year_start,

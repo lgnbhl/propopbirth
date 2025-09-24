@@ -9,7 +9,7 @@
 #' @export
 #' @autoglobal
 #'
-#' @examples
+#' @noRd
 constant_model <- function(
     in_dat, 
     year_start, 

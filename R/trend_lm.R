@@ -10,7 +10,7 @@
 #' @export
 #' @autoglobal
 #'
-#' @examples
+#' @noRd
 trend_lm <- function(
     input_lm,
     year_start,
@@ -22,8 +22,6 @@ trend_lm <- function(
   year_end <- as.numeric(year_end)
   trend_past <- as.numeric(trend_past)
   trend_prop <- as.numeric(trend_prop)
-  
-  browser()
 
   # last year of the past
   past_last <- input_lm |>

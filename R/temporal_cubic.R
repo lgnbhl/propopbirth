@@ -2,14 +2,14 @@
 #'
 #' @param points_dat data frame, with point information (`x0`, `y0`, `z0`, `x1`,
 #'        `y1`, `z1`) by `spatial_unit` and `nat`.
-#' @param year_start numeric, start of prediction
+#' @param year_start numeric, start of prediction.
 #' @param year_end numeric, end of prediction.
 #'
 #' @return tibble with prediction data
 #' @export
 #' @autoglobal
 #'
-#' @examples
+#' @noRd
 temporal_cubic <- function(
     points_dat,
     year_start,
