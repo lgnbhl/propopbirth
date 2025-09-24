@@ -33,7 +33,7 @@ fso_birth <- fso_birth_raw |>
   # identify municipalities without matches (e.g. due to municipality fusions)
   dplyr::mutate(
     spatial_unit = dplyr::case_when(
-      spatial_unit == "Zuerich" ~ "Stadt Zuerich",
+      spatial_unit == "Zürich" ~ "Stadt Zürich",
       is.na(spatial_unit) ~ "unknown",
       .default = spatial_unit
     )
