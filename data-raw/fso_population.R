@@ -11,8 +11,8 @@ fso_pop <- get_population_data(
   year_last = 2023,
   age_fert_min = 15,
   age_fert_max = 49,
-  spatial_code = c("0261", "4566", "4001"),
-  spatial_unit = c("Stadt Zuerich", "Frauenfeld", "Aarau"),
+  spatial_code = c("4001", "4566", "0261"),
+  spatial_unit = c("Aarau", "Frauenfeld", "Stadt Zürich"),
   binational = TRUE
 )
 
