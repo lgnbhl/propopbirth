@@ -1,8 +1,8 @@
 test_that("Simple snapshot test for creating input data", {
   
-  # prepare input ----
-  # fso_birth <- propopbirth::fso_birth
-  # fso_pop <- propopbirth::fso_pop
+  # load package data
+  data("fso_pop")
+  data("fso_birth")
   
     expect_snapshot(dput(
       create_input_data(
