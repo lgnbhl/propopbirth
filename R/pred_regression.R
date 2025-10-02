@@ -19,8 +19,8 @@ pred_regression <- function(y, x1, x2, x3, x4, x5, age_min, age_max) {
   mod_fit <- lm(y ~ x1 + x2 + x3 + x4 + x5)
 
   # new data
-  dat_new <- tibble(age = (age_min - 1):age_max) |>
-    mutate(
+  dat_new <- tibble::tibble(age = (age_min - 1):age_max) |>
+    dplyr::mutate(
       x1 = age + 0.5,
       x2 = x1^2,
       x3 = x1^3,
@@ -37,7 +37,7 @@ pred_regression <- function(y, x1, x2, x3, x4, x5, age_min, age_max) {
 
   # prediction
   output <- dat_new |>
-    mutate(y_reg = a0 + a1 * x1 + a2 * x2 + a3 * x3 + a4 * x4 + a5 * x5)
+    dplyr::mutate(y_reg = a0 + a1 * x1 + a2 * x2 + a3 * x3 + a4 * x4 + a5 * x5)
 
   # output
   return(output)

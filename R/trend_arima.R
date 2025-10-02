@@ -30,7 +30,7 @@ trend_arima <- function(
   arima_forecast <- forecast::forecast(arima_model, h = year_end - year_start + 1)
 
   # output
-  dat_out <- tibble(
+  dat_out <- tibble::tibble(
     year = year_start:year_end,
     y_pred = as.numeric(pmax(0, arima_forecast$mean)),
     category = "ARIMA"
