@@ -6,8 +6,6 @@
 #' @param year_end numeric, end of prediction.
 #'
 #' @return tibble with prediction data
-#' @export
-#' @autoglobal
 #'
 #' @noRd
 temporal_Bezier <- function(

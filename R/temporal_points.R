@@ -10,8 +10,6 @@
 #' @param z1_prop numeric, proportion of the calculated slope of the end point (`z1`).
 #'
 #' @return
-#' @export
-#' @autoglobal
 #'
 #' @noRd
 temporal_points <- function(

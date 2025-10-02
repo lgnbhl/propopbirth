@@ -8,8 +8,6 @@
 #' @param abstol numeric, absolute tolerance (of optim function).
 #'
 #' @return tibble with optimized parameter and objective function.
-#' @export
-#' @autoglobal
 #'
 #' @noRd
 opt_fun <- function(

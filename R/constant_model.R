@@ -6,8 +6,6 @@
 #' @param year_end numeric, last year of the prediction.
 #'
 #' @return tibble with prediction data
-#' @export
-#' @autoglobal
 #'
 #' @noRd
 constant_model <- function(

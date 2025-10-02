@@ -7,8 +7,6 @@
 #' @param trend_prop numeric, y value of the end point: proportion of trend vs. past.
 #'
 #' @return tibble prediction data
-#' @export
-#' @autoglobal
 #'
 #' @noRd
 trend_arima <- function(
