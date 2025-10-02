@@ -137,7 +137,7 @@ forecast_tfr_mab <- function(
   ## temporal end -----------------------------------------------------------
   if (length(temporal_end) > 1) {
   # convert to tibble if another table format is provided
-  temporal_end <- as_tibble(temporal_end)
+  temporal_end <- tibble::as_tibble(temporal_end)
   
   assertthat::assert_that(is_tibble_with_cols(temporal_end),
     msg = paste0(
@@ -164,7 +164,7 @@ forecast_tfr_mab <- function(
   # topic -------------------------------------------------------------------
   # rename topic-column (either `tfr` or `mab`) to column `y`.
   input_data <- topic_data |>
-    dplyr::rename(y = !!sym(topic))
+    dplyr::rename(y = !!rlang::sym(topic))
 
   # calculate model periods -------------------------------------------------
   # first the trend model, then the temporal model and finally the constant model

@@ -126,6 +126,11 @@ get_population_data <- function(
       stringi::stri_unescape_unicode("Staatsangeh\\u00f6rigkeit (Kategorie) - Total")
     )
   )
+  
+  join_col <- stringi::stri_unescape_unicode("Staatsangeh\u00f6rigkeit (Kategorie)")
+  
+  nat_lookup_renamed <- nat_lookup |> dplyr::rename(!!join_col := nat_fso_text)
+    
 
   # binational? filter and text
   if (isTRUE(binational)) {
@@ -198,11 +203,9 @@ get_population_data <- function(
       by = c("Kanton (-) / Bezirk (>>) / Gemeinde (......)" = "valueTexts")
     ) |>
     dplyr::left_join(
-      nat_lookup |> 
-        dplyr::rename(!!stringi::stri_unescape_unicode(
-          "Staatsangeh\\u00f6rigkeit (Kategorie)") := nat_fso_text
-      )
-    ) |>
+      nat_lookup_renamed,
+      by = dplyr::join_by(!!rlang::sym(join_col))
+    ) |> 
     dplyr::mutate(
       year = as.numeric(Jahr),
       age = as.numeric(substr(Alter, 1, 2))
