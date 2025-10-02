@@ -26,15 +26,17 @@ License: GPL (>= 3)
 Depends: 
     R (>= 2.10)
 Imports:
-  dplyr,
-  tibble,
-  forecast,
-  BFS,
-  assertthat,
-  ggplot2,
-  tidyr,
-  purrr,
-  stats
+    dplyr,
+    tibble,
+    forecast,
+    BFS,
+    assertthat,
+    ggplot2,
+    tidyr,
+    purrr,
+    stats,
+    rlang,
+    stringi
 Suggests: 
     knitr,
     rmarkdown,
