@@ -6,8 +6,6 @@
 #' @param mab_proj numeric, projected mab (objective).
 #'
 #' @return numeric, `diff` (absolute difference between mab and mab_proj).
-#' @export
-#' @autoglobal
 #'
 #' @noRd
 mab_fun <- function(
