@@ -4,7 +4,3 @@ export(create_input_data)
 export(forecast_fertility_rate)
 export(forecast_tfr_mab)
 export(get_population_data)
-<<<<<<< HEAD
-=======
-export(mab_fun)
->>>>>>> 520ea6d (remove export and globals for helper functions)
