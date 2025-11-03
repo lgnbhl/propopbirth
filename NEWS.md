@@ -2,7 +2,7 @@
 
 * Fully documented package.
 * Reviewed Code.
-* Added vignettes
+* Added vignettes.
 
 # propopbirth 0.0.0.9000
 

@@ -1,9 +1,7 @@
 # propopbirth
 
 Birth rate forecasts based on FSO (Federal Statistical Office)
-methodology
-
-Important note: Work in progress!
+methodology.
 
 ## Overview
 
@@ -15,8 +13,8 @@ forecasts are used to predict the age-specific birth rates.
 ## Population projections
 
 The output from `{propopbirth}` is fully compatible with 
-[`{propop}`](https://statistik-aargau.github.io/propop/index.html) (An
-R package for population projections in R). `{propop}` needs future
+[`{propop} - An R package for population projections in R`](https://statistik-aargau.github.io/propop/index.html). 
+`{propop}` needs future
 birth rates as input. This is only available at the FSO at cantonal
 level. With `{propopbirth}` the birth rates can also be calculated for
 other spatial units or with own hypothesis.
