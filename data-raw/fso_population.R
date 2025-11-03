@@ -1,8 +1,7 @@
 #' Population data from the Federal Statistical Office
 #'
-#' @description end year population from different spatial units.
+#' @description End year population from different spatial units.
 #'
-#' Update description in folder propop/R/
 
 # Default way to create data, contingent on STATPOP availability
 fso_pop <- get_population_data(
