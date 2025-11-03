@@ -64,10 +64,10 @@ The data for three selected municipalities looks like this:
 
 ```{r, echo = TRUE}
 # load package data
-data("fso_birth")
+data("fso_birth", package = "propopbirth")
 
-fso_birth |> 
-  dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich")) |> 
+fso_birth |>
+  dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich")) |>
   DT::datatable(options = list(pageLength = 5))
 ```
 

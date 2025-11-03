@@ -1,7 +1,7 @@
 #' FSO data for births
 #'
 #' @description Data was retrieved from the FSO.
-#' 
+#'
 #' @docType data
 #'
 
@@ -44,4 +44,5 @@ fso_birth <- fso_birth_raw |>
   dplyr::arrange(year, spatial_unit, nat, age)
 
 # Add data frames to package
-usethis::use_data(fso_birth, overwrite = TRUE)
+# usethis::use_data(fso_birth, overwrite = TRUE)
+save(fso_birth, file = "data/fso_birth.rda")

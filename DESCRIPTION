@@ -24,7 +24,7 @@ Description: First, model input data are calculated. Second, TFR (total fertilit
 URL: Set URL
 License: GPL (>= 3)
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5)
 Imports:
     dplyr,
     tibble,
