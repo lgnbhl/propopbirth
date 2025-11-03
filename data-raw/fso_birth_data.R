@@ -1,6 +1,8 @@
 #' FSO data for births
 #'
 #' @description Data was retrieved from the FSO.
+#' 
+#' @docType data
 #'
 
 # Load data

@@ -5,7 +5,14 @@
 \alias{fso_birth}
 \title{FSO data for births}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 437054 rows and 5 columns.
+A data frame with 437054 rows and 5 variables:
+\describe{
+\item{year}{year within the range 2010-2023}
+\item{spatial_unit}{Swiss municipalities by name}
+\item{nat}{Nationality; either "ch" = Swiss or "int" = international}
+\item{age}{Age in full years}
+\item{n_birth}{number of births}
+}
 }
 \usage{
 fso_birth
