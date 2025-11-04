@@ -36,7 +36,7 @@ trend_arima <- function(
     y_pred = as.numeric(pmax(0, arima_forecast$mean)),
     category = "ARIMA"
   ) |>
-    dplyr::mutate(y = round(y_past_last + trend_prop * (y_pred - y_past_last)), digits_y)
+    dplyr::mutate(y = round(y_past_last + trend_prop * (y_pred - y_past_last), digits_y))
 
   return(dat_out)
 }
