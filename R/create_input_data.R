@@ -46,9 +46,9 @@ create_input_data <- function(
   age_fert_max,
   fert_hist_years,
   binational = TRUE,
-  digits_tfr = 4,
-  digits_mab = 4,
-  digits_fer = 6
+  digits_tfr = 3,
+  digits_mab = 3,
+  digits_fer = 5
 ) {
   # checks ------------------------------------------------------------------
   # birth data
