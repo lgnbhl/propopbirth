@@ -49,4 +49,3 @@ rm(list = setdiff(ls(), "fso_birth"))
 
 # Add data frames to package
 usethis::use_data(fso_birth, overwrite = TRUE)
-# save(fso_birth, file = "data/fso_birth.rda")
