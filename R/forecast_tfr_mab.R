@@ -1,19 +1,19 @@
 #' Forecast total fertility rate (TFR) or mean age of the mother at birth (MAB)
-#' 
+#'
 #' @param topic character, defines the parameter to calculate (`tfr` or `mab`).
-#' @param topic_data data frame, input data tailored to the topic with variables: 
+#' @param topic_data data frame, input data tailored to the topic with variables:
 #'        `spatial_unit`, `nat`, `year`, either `tfr` or `mab`. This data is
 #'        obtained by the function `create_input_data()`. Columns for
 #'        `spatial_unit` and/or `nat` are optional.
 #' @param trend_model vector, specifies the model type (`ARIMA` or `lm`), the
-#'        first (`start`) and last (`end`) year. If an `lm` model is used, the 
-#'        window of past years (`trend_past`) and the proportional amount of 
-#'        past years used to fit the model (`trend_prop`) can be specified. 
-#' @param temporal_model vector, model type (`cubic`, `Bezier` or `constant`), 
-#'        first and last year, proportion of trend (`trend_prop`), proportion 
+#'        first (`start`) and last (`end`) year. If an `lm` model is used, the
+#'        window of past years (`trend_past`) and the proportional amount of
+#'        past years used to fit the model (`trend_prop`) can be specified.
+#' @param temporal_model vector, model type (`cubic`, `Bezier` or `constant`),
+#'        first and last year, proportion of trend (`trend_prop`), proportion
 #'        for slopes (`z0_prop`) and proportion of the slope at the end point
 #'        (`z1_prop`).
-#' @param temporal_end data frame, contains y-values at the end of the temporal 
+#' @param temporal_end data frame, contains y-values at the end of the temporal
 #'        forecast period (`y_end`).
 #' @param constant_model model type (`constant`), first and last year.
 #'
@@ -21,14 +21,14 @@
 #' @export
 #' @autoglobal
 #'
-#' @examples
 forecast_tfr_mab <- function(
-    topic,
-    topic_data,
-    trend_model,
-    temporal_model,
-    temporal_end = NA,
-    constant_model) {
+  topic,
+  topic_data,
+  trend_model,
+  temporal_model,
+  temporal_end = NA,
+  constant_model
+) {
   # checks ------------------------------------------------------------------
   ## topic ------------------------------------------------------------------
   assertthat::assert_that(is.character(topic),
@@ -107,7 +107,7 @@ forecast_tfr_mab <- function(
     msg = paste0(
       "Please specify the proportional amount of past years used to fit the ",
       "`temporal_model` (e.g. `trend_prop` = 0.5)."
-   )
+    )
   )
   assertthat::assert_that("z0_prop" %in% names(temporal_model),
     msg = paste0(
@@ -136,31 +136,31 @@ forecast_tfr_mab <- function(
   )
   ## temporal end -----------------------------------------------------------
   if (length(temporal_end) > 1) {
-  # convert to tibble if another table format is provided
-  temporal_end <- tibble::as_tibble(temporal_end)
-  
-  assertthat::assert_that(is_tibble_with_cols(temporal_end),
-    msg = paste0(
-      "Please provide `temporal_end` in a format that can be converted into ",
-      "a tibble, such as a data frame or datatable."
+    # convert to tibble if another table format is provided
+    temporal_end <- tibble::as_tibble(temporal_end)
+
+    assertthat::assert_that(is_tibble_with_cols(temporal_end),
+      msg = paste0(
+        "Please provide `temporal_end` in a format that can be converted into ",
+        "a tibble, such as a data frame or datatable."
+      )
     )
-  )
-  assertthat::assert_that(
-    isTRUE(all(unique(topic_data$spatial_unit) == unique(temporal_end$spatial_unit))),
-    msg = paste0(
-      "Spatial units specified in the `temporal_end` data must be identical ",
-      "to the levels of spatial units in `topic_data`."
+    assertthat::assert_that(
+      isTRUE(all(unique(topic_data$spatial_unit) == unique(temporal_end$spatial_unit))),
+      msg = paste0(
+        "Spatial units specified in the `temporal_end` data must be identical ",
+        "to the levels of spatial units in `topic_data`."
+      )
     )
-  )
-  assertthat::assert_that(
-    isTRUE(all(unique(topic_data$nat) == unique(temporal_end$nat))),
-    msg = paste0(
-      "Nationalities specified in the `temporal_end` data must be identical ",
-      "to the levels of nationalities in `topic_data`."
+    assertthat::assert_that(
+      isTRUE(all(unique(topic_data$nat) == unique(temporal_end$nat))),
+      msg = paste0(
+        "Nationalities specified in the `temporal_end` data must be identical ",
+        "to the levels of nationalities in `topic_data`."
+      )
     )
-  )
   }
-  
+
   # topic -------------------------------------------------------------------
   # rename topic-column (either `tfr` or `mab`) to column `y`.
   input_data <- topic_data |>
@@ -176,10 +176,10 @@ forecast_tfr_mab <- function(
       purrr::map(~ {
         tibble::tibble(
           trend_arima(
-            year = .x$year, 
-            y = .x$y, 
-            year_start = trend_model["start"], 
-            year_end = temporal_model["end"], 
+            year = .x$year,
+            y = .x$y,
+            year_start = trend_model["start"],
+            year_end = temporal_model["end"],
             trend_prop = trend_model["trend_prop"]
           ),
           spatial_unit = unique(.x$spatial_unit),
@@ -254,18 +254,18 @@ forecast_tfr_mab <- function(
   time_series <- dplyr::bind_rows(
     dplyr::mutate(input_data, category = "past"),
     dplyr::filter(
-      trend_data, 
-      year >= as.numeric(trend_model["start"]), 
+      trend_data,
+      year >= as.numeric(trend_model["start"]),
       year <= as.numeric(trend_model["end"])
     ),
     dplyr::filter(
-      temporal_dat, 
-      year >= as.numeric(temporal_model["start"]), 
+      temporal_dat,
+      year >= as.numeric(temporal_model["start"]),
       year <= as.numeric(temporal_model["end"])
     ),
     dplyr::filter(
-      constant_dat, 
-      year >= as.numeric(constant_model["start"]), 
+      constant_dat,
+      year >= as.numeric(constant_model["start"]),
       year <= as.numeric(constant_model["end"])
     )
   ) |>
