@@ -136,3 +136,10 @@ forecast_fer <- forecast_fertility_rate(
   year_begin = 2024, 
   year_end = 2075)
 ```
+
+## Acknowledgment
+We gratefully acknowledge the Federal Statistical Office (FSO) for providing 
+their SAS code used for fertility projections. And thanks for the FSO for 
+giving the permission to use the birth data within the `{propopbirth}` package.
+
+
