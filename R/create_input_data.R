@@ -180,7 +180,7 @@ create_input_data <- function(
   fer_y <- pop_mean |>
     dplyr::left_join(births, by = c("spatial_unit", "year", "nat", "age")) |>
     tidyr::replace_na(list(n_birth = 0)) |>
-    dplyr::mutate(fer = dplyr::if_else(pop == 0, NA_real_, round(n_birth / pop, 6)))
+    dplyr::mutate(fer = dplyr::if_else(pop == 0, NA_real_, n_birth / pop))
 
 
   # TFR (total fertility rate) ----------------------------------------------
