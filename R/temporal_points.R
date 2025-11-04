@@ -9,17 +9,18 @@
 #' @param z0_prop numeric, proportion of the calculated slope of the start point (`z0`).
 #' @param z1_prop numeric, proportion of the calculated slope of the end point (`z1`).
 #'
-#' @return
+#' @return tibble with prediction data
 #'
 #' @noRd
 temporal_points <- function(
-    input_past, 
-    input_trend, 
-    year_start, 
-    year_end, 
-    trend_prop, 
-    z0_prop, 
-    z1_prop) {
+  input_past,
+  input_trend,
+  year_start,
+  year_end,
+  trend_prop,
+  z0_prop,
+  z1_prop
+) {
   # numeric input
   year_start <- as.numeric(year_start)
   year_end <- as.numeric(year_end)

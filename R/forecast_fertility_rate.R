@@ -1,6 +1,6 @@
 #' Forecast age-specific fertility rates.
 #'
-#' @param fer_dat data frame, fertility data, tibble with variables `spatial_unit`, 
+#' @param fer_dat data frame, fertility data, tibble with variables `spatial_unit`,
 #'        `nat`, `age`, `fer`.
 #' @param tfr_dat tfr data, tibble with variables `spatial_unit`, `nat`, `year`, `tfr`.
 #' @param mab_dat mab data, tibble with variables `spatial_unit`, `nat`, `year`, `mab`.
@@ -13,15 +13,15 @@
 #' @export
 #' @autoglobal
 #'
-#' @examples
 forecast_fertility_rate <- function(
-    fer_dat,
-    tfr_dat,
-    mab_dat,
-    year_start,
-    year_end,
-    maxit = 1000,
-    abstol = 0.001) {
+  fer_dat,
+  tfr_dat,
+  mab_dat,
+  year_start,
+  year_end,
+  maxit = 1000,
+  abstol = 0.001
+) {
   # checks ------------------------------------------------------------------
   ## fertility data ---------------------------------------------------------
   assertthat::assert_that("spatial_unit" %in% names(fer_dat),
@@ -123,7 +123,7 @@ forecast_fertility_rate <- function(
   assertthat::assert_that(is.numeric(year_start),
     msg = "Argument `year_end` must be numeric."
   )
-  
+
   # fertility rate: regression for last data year ---------------------------
   # minimum fertility (without zero)
   min_fer <- min(fer_dat$fer[fer_dat$fer != 0])
@@ -208,8 +208,8 @@ forecast_fertility_rate <- function(
   fer_rate_sta <- dat_reg |>
     dplyr::select(age, spatial_unit, nat, matches("^[ax]\\d+$")) |>
     dplyr::left_join(
-      mab_opt, 
-      by = c("spatial_unit", "nat"), 
+      mab_opt,
+      by = c("spatial_unit", "nat"),
       relationship = "many-to-many"
     ) |>
     dplyr::arrange(year, age, spatial_unit, nat) |>

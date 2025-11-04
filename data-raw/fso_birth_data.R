@@ -1,12 +1,12 @@
 #' FSO data for births
 #'
 #' @description Data was retrieved from the FSO.
-#' 
+#'
 #' @docType data
 #'
 
 # Load data
-fso_birth_raw <- data.table::fread("data-raw/fso_birth.csv") |>
+fso_birth_raw <- data.table::fread("data-raw/fso_birth_raw.csv") |>
   tibble::as_tibble()
 
 fso_municipality <- readxl::read_excel(
@@ -42,6 +42,10 @@ fso_birth <- fso_birth_raw |>
   ) |>
   dplyr::select(year, spatial_unit, nat, age, n_birth = bir) |>
   dplyr::arrange(year, spatial_unit, nat, age)
+
+# remove all objects except 'fso_birth'
+rm(list = setdiff(ls(), "fso_birth"))
+
 
 # Add data frames to package
 usethis::use_data(fso_birth, overwrite = TRUE)

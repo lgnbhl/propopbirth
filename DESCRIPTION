@@ -24,7 +24,7 @@ Description: First, model input data are calculated. Second, TFR (total fertilit
 URL: Set URL
 License: GPL (>= 3)
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5)
 Imports:
     dplyr,
     tibble,
@@ -46,7 +46,7 @@ Suggests:
 Encoding: UTF-8
 Roxygen: list( markdown = TRUE, roclets = c("collate", "namespace", "rd",
     "roxyglobals::global_roclet") )
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LazyData: true

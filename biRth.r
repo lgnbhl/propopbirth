@@ -1,17 +1,16 @@
 # header ------------------------------------------------------------------
 
-# Code to estimate future fertility rates 
+# Code to estimate future fertility rates
 # in general with the FSO method (optimization with optim function)
 # KORSTAT forecast working group, April 2025
-
 
 
 # preparation -------------------------------------------------------------
 
 # packages
-library(BFS)        # for FSO input data
-library(forecast)   # ARIMA model
-library(here)       # paths
+library(BFS) # for FSO input data
+library(forecast) # ARIMA model
+library(here) # paths
 library(tidyverse)
 library(propopbirth)
 
@@ -32,12 +31,9 @@ spatial_code <- c("0261", "4566", "4001")
 spatial_unit_name <- c("Stadt Zuerich", "Frauenfeld", "Aarau")
 
 
-
-
-
 # get population and birth data -------------------------------------------
 
-# end of year female population at 'fertile age' 
+# end of year female population at 'fertile age'
 # comment: year and age minus 1 to calculate the mean annual population afterwards
 
 # pop <- get_population_data(
@@ -50,7 +46,7 @@ spatial_unit_name <- c("Stadt Zuerich", "Frauenfeld", "Aarau")
 #   spatial_unit = spatial_unit
 # )
 
-   
+
 pop <- fso_pop
 
 # comments
@@ -69,15 +65,17 @@ pop <- fso_pop
 # )
 
 
-
 # birth
-bir <- fso_birth |> 
-  filter(age >= age_fert_min,
-         age <= age_fert_max,
-         spatial_unit %in% spatial_unit_name)
-  
-  
-  
+
+# load("data/fso_birth.rda")
+
+bir <- fso_birth |>
+  filter(
+    age >= age_fert_min,
+    age <= age_fert_max,
+    spatial_unit %in% spatial_unit_name
+  )
+
 
 # get input data ----------------------------------------------------------
 
@@ -100,22 +98,24 @@ input <- create_input_data(
 
 # optional: given forecast values
 temporal_end_tfr <- expand_grid(
-  spatial_unit = spatial_unit_name, 
-  nat = c("ch", "int")) |> 
+  spatial_unit = spatial_unit_name,
+  nat = c("ch", "int")
+) |>
   mutate(y_end = c(0.8, 0.8, 1.0, 2.0, 1.2, 1.3))
 
 
 # forecast
 forecast_tfr <- forecast_tfr_mab(
-  topic = "tfr", 
+  topic = "tfr",
   input_dataset = input$tfr,
   trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
   temporal_model = c(
-    "cubic", 2027, 2055, trend_prop = 0.8, z0_prop = 0.7, z1_prop = 0
+    "cubic", 2027, 2055,
+    trend_prop = 0.8, z0_prop = 0.7, z1_prop = 0
   ),
   temporal_end = NA,
   constant_model = c("constant", 2056, 2075)
-  ) 
+)
 
 
 # plot
@@ -125,16 +125,13 @@ ggplot(forecast_tfr) +
   facet_grid(nat ~ spatial_unit)
 
 
-
-
-
-
 # forecast: mab ------------------------------------------------------------
 
 # optional: given forecast values
 temporal_end_mab <- expand_grid(
-  spatial_unit = spatial_unit, 
-  nat = c("ch", "int")) |> 
+  spatial_unit = spatial_unit,
+  nat = c("ch", "int")
+) |>
   mutate(y_end = c(35, 38, 33, 31, 34, 32))
 
 
@@ -142,12 +139,12 @@ temporal_end_mab <- expand_grid(
 forecast_mab <- forecast_tfr_mab(
   topic = "mab", input_dataset = input$mab,
   trend_model = c("lm", 2024, 2026, trend_past = 7, trend_prop = 0.5),
-  temporal_model = c("Bezier", 2027, 2055, 
-    trend_prop = 0.3, z0_prop = 0.7, z1_prop = 0),
-  temporal_end = NA,  
+  temporal_model = c("Bezier", 2027, 2055,
+    trend_prop = 0.3, z0_prop = 0.7, z1_prop = 0
+  ),
+  temporal_end = NA,
   constant_model = c("constant", 2056, 2075)
-  ) 
-
+)
 
 
 # plot
@@ -157,37 +154,34 @@ ggplot(forecast_mab) +
   facet_grid(nat ~ spatial_unit)
 
 
-
 # forecast: fertility rate ------------------------------------------------
 
 # forecast ('birth_rate', same name as in propop)
 forecast_fer <- forecast_fertility_rate(
   fer_dat = input$fer,
   tfr_dat = forecast_tfr,
-  mab_dat = forecast_mab, 
-  year_begin = 2024, 
-  year_end = 2075)
+  mab_dat = forecast_mab,
+  year_begin = 2024,
+  year_end = 2075
+)
 
 
 # plot: year on x-axis
-    forecast_fer |>     
-    bind_rows(input$fer_y) |>
-    filter(age %% 5 == 0) |> 
-    mutate(age = factor(age)) |>
-    ggplot() +
-    geom_vline(xintercept = year_last + 1, linetype = 2) +      
-    geom_line(aes(year, birth_rate, color = age)) +
-    facet_grid(nat ~ spatial_unit)
+forecast_fer |>
+  bind_rows(input$fer_y) |>
+  filter(age %% 5 == 0) |>
+  mutate(age = factor(age)) |>
+  ggplot() +
+  geom_vline(xintercept = year_last + 1, linetype = 2) +
+  geom_line(aes(year, birth_rate, color = age)) +
+  facet_grid(nat ~ spatial_unit)
 
 
 # plot: age on x-axis
-    forecast_fer |>     
-    bind_rows(input$fer_y ) |>
-    filter(year %% 10 == 0) |>
-    mutate(year = factor(year)) |>
-    ggplot() +
-    geom_line(aes(age, birth_rate, color = year)) +
-    facet_grid(nat ~ spatial_unit)
-
-
-
+forecast_fer |>
+  bind_rows(input$fer_y) |>
+  filter(year %% 10 == 0) |>
+  mutate(year = factor(year)) |>
+  ggplot() +
+  geom_line(aes(age, birth_rate, color = year)) +
+  facet_grid(nat ~ spatial_unit)
