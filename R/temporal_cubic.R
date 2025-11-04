@@ -4,14 +4,17 @@
 #'        `y1`, `z1`) by `spatial_unit` and `nat`.
 #' @param year_start numeric, start of prediction.
 #' @param year_end numeric, end of prediction.
+#' @param digits_y numeric, number of digits of the y value
 #'
 #' @return tibble with prediction data
 #'
 #' @noRd
 temporal_cubic <- function(
-    points_dat,
-    year_start,
-    year_end) {
+  points_dat,
+  year_start,
+  year_end,
+  digits_y = 3
+) {
   # numeric input
   year_start <- as.numeric(year_start)
   year_end <- as.numeric(year_end)
@@ -33,7 +36,7 @@ temporal_cubic <- function(
   ) |>
     dplyr::left_join(cubic_para, by = c("spatial_unit", "nat")) |>
     dplyr::mutate(
-      y = pmax(0, a0 + (a1 * year) + (a2 * (year**2)) + (a3 * (year**3))),
+      y = round(pmax(0, a0 + (a1 * year) + (a2 * (year**2)) + (a3 * (year**3))), digits_y),
       category = "cubic"
     ) |>
     dplyr::select(spatial_unit, nat, year, y, category)
