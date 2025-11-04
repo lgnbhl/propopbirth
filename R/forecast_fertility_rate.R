@@ -8,6 +8,7 @@
 #' @param year_end numeric, end of prediction.
 #' @param maxit numeric, maximum iterations of optimization.
 #' @param abstol numeric, absolute tolerance of optimization.
+#' @param digits_birth_rate numeric, number of digits of the birth rate.
 #'
 #' @return birth rate, tibble with variables `spatial_unit`, `nat`, `age`, `birth_rate`.
 #' @export
@@ -20,7 +21,8 @@ forecast_fertility_rate <- function(
   year_start,
   year_end,
   maxit = 1000,
-  abstol = 0.001
+  abstol = 0.001,
+  digits_birth_rate = 5
 ) {
   # checks ------------------------------------------------------------------
   ## fertility data ---------------------------------------------------------
@@ -228,7 +230,7 @@ forecast_fertility_rate <- function(
   birth_rate <- tfr_dat |>
     dplyr::filter(year >= year_start) |>
     dplyr::right_join(fer_rate_sta, by = c("year", "spatial_unit", "nat")) |>
-    dplyr::mutate(birth_rate = fer_rate_sta * tfr) |>
+    dplyr::mutate(birth_rate = round(fer_rate_sta * tfr, digits_birth_rate)) |>
     dplyr::select(spatial_unit, nat, year, age, birth_rate) |>
     dplyr::arrange(spatial_unit, nat, year, age)
 
