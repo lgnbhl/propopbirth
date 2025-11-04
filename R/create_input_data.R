@@ -210,7 +210,7 @@ create_input_data <- function(
       pop = sum(pop, na.rm = TRUE),
       n_birth = sum(n_birth, na.rm = TRUE), .groups = "drop"
     ) |>
-    dplyr::mutate(fer = dplyr::if_else(pop == 0, NA_real_, round(n_birth / pop), digits_fer)) |>
+    dplyr::mutate(fer = dplyr::if_else(pop == 0, NA_real_, round(n_birth / pop, digits_fer))) |>
     dplyr::select(spatial_unit, nat, age, fer) |>
     dplyr::arrange(spatial_unit, nat, age)
 
