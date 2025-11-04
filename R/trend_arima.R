@@ -5,7 +5,7 @@
 #' @param year_start numeric, start of prediction.
 #' @param year_end numeric, end of prediction.
 #' @param trend_prop numeric, y value of the end point: proportion of trend vs. past.
-#' @param digits_y numeric, number of digits of the y value
+#' @param digits_y numeric, number of digits of the y value.
 #'
 #' @return tibble prediction data
 #'

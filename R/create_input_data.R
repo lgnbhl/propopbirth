@@ -13,9 +13,9 @@
 #' @param binational boolean, `TRUE` indicates that projections discriminate
 #'  between two groups of nationalities. `FALSE` indicates that the
 #'  projection is run without distinguishing between nationalities.
-#' @param digits_tfr numeric, number of digits for tfr (total fertility rate)
-#' @param digits_mab numeric, number of digits for mab (mean age of the mother at birth)
-#' @param digits_fer numeric, number of digits for the fertility rate
+#' @param digits_tfr numeric, number of digits for tfr (total fertility rate).
+#' @param digits_mab numeric, number of digits for mab (mean age of the mother at birth).
+#' @param digits_fer numeric, number of digits for the fertility rate.
 #'
 #' @return list with:
 #'  * tfr (total fertility rate),

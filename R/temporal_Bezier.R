@@ -4,7 +4,7 @@
 #'        `y1`, `z1`) by `spatial_unit`, `nat`.
 #' @param year_start numeric, start of prediction.
 #' @param year_end numeric, end of prediction.
-#' @param digits_y numeric, number of digits of the y value
+#' @param digits_y numeric, number of digits of the y value.
 #'
 #' @return tibble with prediction data
 #'
