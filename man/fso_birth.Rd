@@ -20,4 +20,8 @@ fso_birth
 \description{
 Data was retrieved from the FSO.
 }
+\examples{
+glimpse(fso_birth)
+
+}
 \keyword{datasets}

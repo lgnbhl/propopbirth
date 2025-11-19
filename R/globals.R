@@ -44,6 +44,12 @@ utils::globalVariables(c(
   "category", # <forecast_tfr_mab>
   "y_end", # <forecast_tfr_mab>
   ":=", # <forecast_tfr_mab>
+  "Gemeindename", # <get_birth_data>
+  "spatial_unit", # <get_birth_data>
+  "year", # <get_birth_data>
+  "nat", # <get_birth_data>
+  "age", # <get_birth_data>
+  "bir", # <get_birth_data>
   "code", # <get_population_data>
   "values", # <get_population_data>
   "valueTexts", # <get_population_data>

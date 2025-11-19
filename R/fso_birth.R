@@ -15,5 +15,9 @@
 #' 
 #' @docType data
 #' 
+#' @keywords datasets
+#' 
+#' @examples
+#' glimpse(fso_birth)
 #'
 "fso_birth"
