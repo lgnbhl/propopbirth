@@ -21,7 +21,7 @@ Authors@R: c(
 Description: First, model input data are calculated. Second, TFR (total fertility 
     rate) and MAB (mean age of the mother at birth) are predicted. Third, TFR 
     and MAB forecasts are used to predict the age-specific birth rates.
-URL: Set URL
+URL: Set URL, https://statistik-aargau.github.io/propopbirth_test/
 License: GPL (>= 3)
 Depends: 
     R (>= 3.5)
