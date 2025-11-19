@@ -11,7 +11,8 @@ forecast_fertility_rate(
   year_start,
   year_end,
   maxit = 1000,
-  abstol = 0.001
+  abstol = 0.001,
+  digits_birth_rate = 5
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ forecast_fertility_rate(
 \item{maxit}{numeric, maximum iterations of optimization.}
 
 \item{abstol}{numeric, absolute tolerance of optimization.}
+
+\item{digits_birth_rate}{numeric, number of digits of the birth rate.}
 }
 \value{
 birth rate, tibble with variables \code{spatial_unit}, \code{nat}, \code{age}, \code{birth_rate}.

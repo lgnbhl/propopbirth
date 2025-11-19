@@ -12,7 +12,10 @@ create_input_data(
   age_fert_min,
   age_fert_max,
   fert_hist_years,
-  binational = TRUE
+  binational = TRUE,
+  digits_tfr = 3,
+  digits_mab = 3,
+  digits_fer = 5
 )
 }
 \arguments{
@@ -36,6 +39,12 @@ fertility rates?}
 \item{binational}{boolean, \code{TRUE} indicates that projections discriminate
 between two groups of nationalities. \code{FALSE} indicates that the
 projection is run without distinguishing between nationalities.}
+
+\item{digits_tfr}{numeric, number of digits for tfr (total fertility rate).}
+
+\item{digits_mab}{numeric, number of digits for mab (mean age of the mother at birth).}
+
+\item{digits_fer}{numeric, number of digits for the fertility rate.}
 }
 \value{
 list with:
@@ -49,7 +58,6 @@ list with:
 Create model input data
 }
 \examples{
-data("fso_birth", package = "propopbirth")
 create_input_data(
   population = fso_pop,
   births = fso_birth |>
