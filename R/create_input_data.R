@@ -25,7 +25,6 @@
 #' @autoglobal
 #'
 #' @examples
-#' data("fso_birth", package = "propopbirth")
 #' create_input_data(
 #'   population = fso_pop,
 #'   births = fso_birth |>

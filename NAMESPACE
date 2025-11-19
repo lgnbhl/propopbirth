@@ -3,4 +3,5 @@
 export(create_input_data)
 export(forecast_fertility_rate)
 export(forecast_tfr_mab)
+export(get_birth_data)
 export(get_population_data)
