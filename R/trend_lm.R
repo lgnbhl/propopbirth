@@ -5,16 +5,19 @@
 #' @param year_end numeric, end of prediction.
 #' @param trend_past numeric, number of past years that are used to fit the model.
 #' @param trend_prop numeric, y value of the end point: proportion of trend vs. past.
+#' @param digits_y numeric, number of digits of the y value.
 #'
 #' @return tibble with prediction data
 #'
 #' @noRd
 trend_lm <- function(
-    input_lm,
-    year_start,
-    year_end,
-    trend_past,
-    trend_prop) {
+  input_lm,
+  year_start,
+  year_end,
+  trend_past,
+  trend_prop,
+  digits_y = 3
+) {
   # numeric input
   year_start <- as.numeric(year_start)
   year_end <- as.numeric(year_end)
@@ -51,7 +54,7 @@ trend_lm <- function(
     spatial_unit = unique(in_dat$spatial_unit),
     nat = unique(in_dat$nat)
   )
-  
+
   lm_pred <- new_data |>
     dplyr::mutate(
       y_pred = pmax(0, predict(lm_fit, newdata = new_data)),
@@ -59,7 +62,7 @@ trend_lm <- function(
     ) |>
     dplyr::left_join(past_last, by = c("spatial_unit", "nat")) |>
     dplyr::mutate(
-      y = pmax(0, y_past_last + trend_prop * (y_pred - y_past_last))
+      y = round(pmax(0, y_past_last + trend_prop * (y_pred - y_past_last)), digits_y)
     ) |>
     dplyr::select(spatial_unit, nat, year, y, category)
 

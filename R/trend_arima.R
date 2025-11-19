@@ -5,16 +5,19 @@
 #' @param year_start numeric, start of prediction.
 #' @param year_end numeric, end of prediction.
 #' @param trend_prop numeric, y value of the end point: proportion of trend vs. past.
+#' @param digits_y numeric, number of digits of the y value.
 #'
 #' @return tibble prediction data
 #'
 #' @noRd
 trend_arima <- function(
-    year,
-    y,
-    year_start,
-    year_end,
-    trend_prop) {
+  year,
+  y,
+  year_start,
+  year_end,
+  trend_prop,
+  digits_y = 3
+) {
   # numeric input
   year_start <- as.numeric(year_start)
   year_end <- as.numeric(year_end)
@@ -33,7 +36,7 @@ trend_arima <- function(
     y_pred = as.numeric(pmax(0, arima_forecast$mean)),
     category = "ARIMA"
   ) |>
-    dplyr::mutate(y = y_past_last + trend_prop * (y_pred - y_past_last))
+    dplyr::mutate(y = round(y_past_last + trend_prop * (y_pred - y_past_last), digits_y))
 
   return(dat_out)
 }

@@ -13,6 +13,9 @@
 #' @param binational boolean, `TRUE` indicates that projections discriminate
 #'  between two groups of nationalities. `FALSE` indicates that the
 #'  projection is run without distinguishing between nationalities.
+#' @param digits_tfr numeric, number of digits for tfr (total fertility rate).
+#' @param digits_mab numeric, number of digits for mab (mean age of the mother at birth).
+#' @param digits_fer numeric, number of digits for the fertility rate.
 #'
 #' @return list with:
 #'  * tfr (total fertility rate),
@@ -35,14 +38,18 @@
 #'   binational = TRUE
 #' )
 create_input_data <- function(
-    population,
-    births,
-    year_first,
-    year_last,
-    age_fert_min,
-    age_fert_max,
-    fert_hist_years,
-    binational = TRUE) {
+  population,
+  births,
+  year_first,
+  year_last,
+  age_fert_min,
+  age_fert_max,
+  fert_hist_years,
+  binational = TRUE,
+  digits_tfr = 3,
+  digits_mab = 3,
+  digits_fer = 5
+) {
   # checks ------------------------------------------------------------------
   # birth data
   assertthat::assert_that("year" %in% names(births),
@@ -95,7 +102,7 @@ create_input_data <- function(
   assertthat::assert_that(is.numeric(population$n_pop),
     msg = "Column `n_pop` in `population` must be numeric."
   )
-  
+
   # further arguments
   assertthat::assert_that(is.numeric(year_first),
     msg = "The argument `year_first` must be numeric."
@@ -112,9 +119,9 @@ create_input_data <- function(
   assertthat::assert_that(is.numeric(fert_hist_years),
     msg = "The argument `fert_hist_years` must be numeric."
   )
-  
+
   # nationality
-  if (binational){
+  if (binational) {
     assertthat::assert_that("nat" %in% names(births),
       msg = "Column `nat` is missing in `births`."
     )
@@ -129,14 +136,14 @@ create_input_data <- function(
     )
   } else {
     # dummy column with only one nationality "ch"
-    births <- births |> 
+    births <- births |>
       dplyr::mutate(nat = "ch")
-    
-    population <- population |> 
+
+    population <- population |>
       dplyr::mutate(nat = "ch")
   }
-  
-  
+
+
   # mean annual population --------------------------------------------------
   # population at the end of the year, all possible variable combinations
   pop_end_year <- tidyr::expand_grid(
@@ -179,7 +186,7 @@ create_input_data <- function(
   # TFR (total fertility rate) ----------------------------------------------
   tfr <- fer_y |>
     dplyr::group_by(spatial_unit, nat, year) |>
-    dplyr::summarize(tfr = sum(fer, na.rm = TRUE), .groups = "drop") |>
+    dplyr::summarize(tfr = round(sum(fer, na.rm = TRUE), digits_tfr), .groups = "drop") |>
     dplyr::arrange(spatial_unit, nat, year)
 
 
@@ -187,7 +194,7 @@ create_input_data <- function(
   mab <- fer_y |>
     dplyr::group_by(spatial_unit, nat, year) |>
     dplyr::filter(!is.na(fer)) |>
-    dplyr::summarize(mab = weighted.mean(age, fer, na.rm = TRUE), .groups = "drop") |>
+    dplyr::summarize(mab = round(weighted.mean(age, fer, na.rm = TRUE), digits_mab), .groups = "drop") |>
     dplyr::arrange(spatial_unit, nat, year)
 
 
@@ -203,19 +210,19 @@ create_input_data <- function(
       pop = sum(pop, na.rm = TRUE),
       n_birth = sum(n_birth, na.rm = TRUE), .groups = "drop"
     ) |>
-    dplyr::mutate(fer = dplyr::if_else(pop == 0, NA_real_, n_birth / pop)) |>
+    dplyr::mutate(fer = dplyr::if_else(pop == 0, NA_real_, round(n_birth / pop, digits_fer))) |>
     dplyr::select(spatial_unit, nat, age, fer) |>
     dplyr::arrange(spatial_unit, nat, age)
 
 
   # Output ------------------------------------------------------------------
   # select output columns with or without nationality
-  if (binational){
+  if (binational) {
     cols_out <- c("spatial_unit", "nat", "year", "age", "birth_rate")
   } else {
     cols_out <- c("spatial_unit", "year", "age", "birth_rate")
   }
-  
+
   # fer_y (fertility per year) is in the output to make plots
   # (at the very end of the fertility rate forecast)
   fer_y_out <- fer_y |>
