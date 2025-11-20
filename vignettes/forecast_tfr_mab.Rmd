@@ -24,7 +24,7 @@ The FSO model for TFR and MAB consists of three time periods
 
 -   **trend** period: in the FSO model usually a few years (one to five years)
 -   **temporal** period: the majority of forecast period (FSO: approximately until 2055)
--   **constant** period: end of the for forecast (FSO: from 2056 until 2075)
+-   **constant** period: end of the forecast (FSO: from 2056 until 2075)
 
 ```{r fig-time-periods, echo = FALSE, out.width = '70%', fig.cap = "time periods"}
 #| fig.alt: >
