@@ -27,6 +27,12 @@ The FSO model for TFR and MAB consists of three time periods
 -   **constant** period: end of the for forecast (FSO: from 2056 until 2075)
 
 ```{r fig-time-periods, echo = FALSE, out.width = '70%', fig.cap = "time periods"}
+#| fig.alt: >
+#|   The FSO model for TFR and MAB consists of three time periods. 
+#|   First, the trend period: In the FSO model this usually covers 
+#|   one to five years. Second, the temporal period: This is the 
+#|   majority of forecast period. Third, the constant period; 
+#|   this part covers end of the forecast.
 
 knitr::include_graphics("figures/time_periods.png")
 
@@ -73,6 +79,11 @@ If an `lm` model is used, the window of past years (`trend_past`) and the propor
 In general, the FSO uses **given values** for TFR and MAB at the end of the temporal period. These target points are more or less subjectively determined by the cantons. For the cantonal forecasts this is manageable. However, this is often not possible or meaningful (e.g. forecasts for many municipalities or other spatial units). Therefore, we provide in `{propopbirth}` an additional **data-driven approach**. In this approach, the target points of the temporal period (point C in the figure below) are derived using the trend period model. A parameter determines, how much of the trend model is used to calculate the target point C. Example: A parameter of 0.7 means: 70 % of the trend is projected to the future to determine point C.
 
 ```{r fig-point-C, echo = FALSE, out.width = '50%', fig.cap = "target point with data driven approach"}
+#| fig.alt: >
+#|   The propopbirth package provides an additional data-driven approach 
+#|   to determine the end point of the temporal period. For this calculation, 
+#|   the previous trend period model is used again. A parameter determines 
+#|   the percentage of trend which is used to calculate the target point.
 
 knitr::include_graphics("figures/point_C.png")
 

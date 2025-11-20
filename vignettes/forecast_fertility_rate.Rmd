@@ -35,6 +35,17 @@ $$
 -   **Reverse**: In this step, the TFR forecast calculated earlier is applied. The standardized fertility rate is multiplied by the TFR forecast. As a result you get the future age-specific fertility rates.
 
 ```{r fig-model-structure, echo=FALSE, out.width='85%', fig.cap="model structure"}
+#| fig.alt: >
+#|   The model structure consists of several procedures: First, the age-specific 
+#|   fertility rate is cumulated and standardized to values between zero and one. 
+#|   Second, the cumulated and standardized values are fitted in a regression to 
+#|   a fifth-degree polynomial of age. Third, the estimated regression coefficients 
+#|   remain constant, except the intercept; with optimization, the intercept 
+#|   in changed to achieve the previously calculated future MAB values. Fourth, 
+#|   the calculations are reversed to get standardized age-specific fertility rates. 
+#|   Fifth, the standardized values are multiplied by TFR to estimate future 
+#|   age-specific fertility rates.
+
 knitr::include_graphics("figures/fertility_rate_forecast.png")
 ```
 
