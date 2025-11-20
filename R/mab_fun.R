@@ -25,7 +25,7 @@ mab_fun <- function(
   # mean age at birth
   # on purpose also calculate over (`age_min` - 1) since
   # contribution at that age is zero
-  mab <- weighted.mean(age, fer_age)
+  mab <- stats::weighted.mean(age, fer_age)
 
   # difference to optimize (i.e. minimize absolute difference)
   diff <- abs(mab - mab_proj)

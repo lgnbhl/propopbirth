@@ -22,7 +22,7 @@ get_birth_data <- function() {
     )
   
   # Prepare births data
-  fso_birth <- fso_birth_raw |>
+  fso_birth_data <- fso_birth_raw |>
     # define factor levels for nationality
     dplyr::mutate(
       nat = dplyr::case_when(
@@ -50,5 +50,5 @@ get_birth_data <- function() {
   
   
   # output
-  return(fso_birth)
+  return(fso_birth_data)
 }

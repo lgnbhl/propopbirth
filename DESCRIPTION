@@ -41,6 +41,8 @@ Suggests:
     knitr,
     rmarkdown,
     DT,
+    readxl,
+    data.table,
     testthat (>= 3.0.0),
     constructive (>= 1.0.1)
 Encoding: UTF-8

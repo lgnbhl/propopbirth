@@ -1,9 +1,5 @@
 test_that("Simple snapshot test for creating input data", {
   
-  # load package data
-  data("fso_pop")
-  data("fso_birth")
-  
     expect_snapshot(dput(
       create_input_data(
         population = fso_pop,

@@ -193,7 +193,10 @@ create_input_data <- function(
   mab <- fer_y |>
     dplyr::group_by(spatial_unit, nat, year) |>
     dplyr::filter(!is.na(fer)) |>
-    dplyr::summarize(mab = round(weighted.mean(age, fer, na.rm = TRUE), digits_mab), .groups = "drop") |>
+    dplyr::summarize(
+      mab = round(stats::weighted.mean(age, fer, na.rm = TRUE), digits_mab), 
+      .groups = "drop"
+    ) |>
     dplyr::arrange(spatial_unit, nat, year)
 
 
