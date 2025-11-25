@@ -11,6 +11,8 @@
 #'
 #' @return tibble with prediction data per age year
 #'
+#' @importFrom stats lm coef
+#'
 #' @noRd
 pred_regression <- function(y, x1, x2, x3, x4, x5, age_min, age_max) {
   # fit

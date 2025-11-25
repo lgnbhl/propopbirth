@@ -44,12 +44,6 @@ utils::globalVariables(c(
   "category", # <forecast_tfr_mab>
   "y_end", # <forecast_tfr_mab>
   ":=", # <forecast_tfr_mab>
-  "Gemeindename", # <get_birth_data>
-  "spatial_unit", # <get_birth_data>
-  "year", # <get_birth_data>
-  "nat", # <get_birth_data>
-  "age", # <get_birth_data>
-  "bir", # <get_birth_data>
   "code", # <get_population_data>
   "values", # <get_population_data>
   "valueTexts", # <get_population_data>
@@ -63,5 +57,45 @@ utils::globalVariables(c(
   "nat", # <get_population_data>
   "age", # <get_population_data>
   "pop", # <get_population_data>
+  "z0", # <temporal_Bezier>
+  "z1", # <temporal_Bezier>
+  "x0", # <temporal_Bezier>
+  "x1", # <temporal_Bezier>
+  "y1", # <temporal_Bezier>
+  "y0", # <temporal_Bezier>
+  "delta_z", # <temporal_Bezier>
+  "xc", # <temporal_Bezier>
+  "year", # <temporal_Bezier>
+  "t1", # <temporal_Bezier>
+  "yc", # <temporal_Bezier>
+  "t2", # <temporal_Bezier>
+  "spatial_unit", # <temporal_Bezier>
+  "nat", # <temporal_Bezier>
+  "y", # <temporal_Bezier>
+  "category", # <temporal_Bezier>
+  "y0", # <temporal_constant>
+  "spatial_unit", # <temporal_constant>
+  "nat", # <temporal_constant>
+  "year", # <temporal_constant>
+  "y", # <temporal_constant>
+  "category", # <temporal_constant>
+  "year", # <temporal_points>
+  "y", # <temporal_points>
+  "spatial_unit", # <temporal_points>
+  "nat", # <temporal_points>
+  "y_past_last", # <temporal_points>
+  "y_new", # <temporal_points>
+  "delta_y", # <temporal_points>
+  "delta_x", # <temporal_points>
+  "z", # <temporal_points>
+  "z0", # <temporal_points>
+  "z1", # <temporal_points>
+  "year", # <trend_lm>
+  "y", # <trend_lm>
+  "spatial_unit", # <trend_lm>
+  "nat", # <trend_lm>
+  "y_past_last", # <trend_lm>
+  "y_pred", # <trend_lm>
+  "category", # <trend_lm>
   NULL
 ))

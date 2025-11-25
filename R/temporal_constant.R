@@ -6,6 +6,8 @@
 #' @param year_end numeric, end of prediction.
 #' @param digits_y numeric, number of digits of the y value.
 #'
+#' @autoglobal
+#'
 #' @return tibble with prediction data
 #'
 #' @noRd

@@ -9,6 +9,8 @@
 #' @param z0_prop numeric, proportion of the calculated slope of the start point (`z0`).
 #' @param z1_prop numeric, proportion of the calculated slope of the end point (`z1`).
 #'
+#' @autoglobal
+#' 
 #' @return tibble with prediction data
 #'
 #' @noRd

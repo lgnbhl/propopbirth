@@ -31,14 +31,15 @@ Imports:
     forecast,
     BFS,
     assertthat,
-    ggplot2,
     tidyr,
     purrr,
     stats,
     rlang,
-    stringi
+    stringi,
+    utils
 Suggests: 
     knitr,
+    ggplot2,
     rmarkdown,
     DT,
     readxl,

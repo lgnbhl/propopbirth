@@ -7,6 +7,9 @@
 #' @param trend_prop numeric, y value of the end point: proportion of trend vs. past.
 #' @param digits_y numeric, number of digits of the y value.
 #'
+#' @autoglobal
+#' @importFrom stats lm predict
+#'
 #' @return tibble with prediction data
 #'
 #' @noRd

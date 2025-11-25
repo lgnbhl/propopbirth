@@ -9,6 +9,8 @@
 #'
 #' @return tibble prediction data
 #'
+#' @importFrom utils tail
+#'
 #' @noRd
 trend_arima <- function(
   year,

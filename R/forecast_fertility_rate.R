@@ -208,7 +208,7 @@ forecast_fertility_rate <- function(
 
   # standardized fertility rate per year (standardized)
   fer_rate_sta <- dat_reg |>
-    dplyr::select(age, spatial_unit, nat, matches("^[ax]\\d+$")) |>
+    dplyr::select(age, spatial_unit, nat, dplyr::matches("^[ax]\\d+$")) |>
     dplyr::left_join(
       mab_opt,
       by = c("spatial_unit", "nat"),
