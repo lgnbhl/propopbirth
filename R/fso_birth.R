@@ -18,6 +18,6 @@
 #' @keywords datasets
 #' 
 #' @examples
-#' glimpse(fso_birth)
+#' dplyr::glimpse(fso_birth)
 #'
 "fso_birth"

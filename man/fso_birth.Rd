@@ -21,7 +21,7 @@ fso_birth
 Data was retrieved from the FSO.
 }
 \examples{
-glimpse(fso_birth)
+dplyr::glimpse(fso_birth)
 
 }
 \keyword{datasets}
