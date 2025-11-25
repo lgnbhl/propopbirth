@@ -16,6 +16,13 @@ Authors@R: c(
       "Norah", "Efosa",
       email = "norah.efosa@ag.ch",
       role = c("aut", "cre")
+    ),
+    person(
+      given = "Felix",
+      family = "Luginbuhl",
+      role = c("ctb"),
+      email = "felix.luginbuehl@sg.ch", 
+      comment = c(ORCID = "0009-0008-6625-2899")
     )
   )
 Description: First, model input data are calculated. Second, TFR (total fertility 
