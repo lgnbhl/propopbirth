@@ -1,0 +1,169 @@
+# Fertility rate forecast
+
+## Model structure
+
+The age-specific fertility rate forecast is modeled in four steps:
+
+- **Cumulate, standardize**: The age-specific fertility rate (see input
+  data preparation) is cumulated and standardized to values between 0
+  and 1. This cumulated and standardized value is called $y*$.
+
+- **Regression**: First, $y*$ is transformed. Then, a fifth-degree
+  regression is fitted to $y*$ vs. $x$ (i.e. age + 0.5). The parameters
+  $a_{0}$, …, $a_{5}$ of the regression are estimated.
+
+\$\$ y = \log(-\log(y^\*)) \\ x = age + 0.5 \\ y = a_0 + a_1 x + a_2
+x^2 + a_3 x^3 + a_4 x^4 + a_5 x^5 \$\$
+
+- **Optimization**: In this step, the previously calculated MAB forecast
+  is used (MAB prediction for each year in the future). From the
+  regression above, all parameters are kept constant except $a_{0}$. For
+  every year in the future, only the value of $a_{0}$ is changed (only
+  the intercept, all other regression coefficients are kept constant).
+  This is done for every year until the y-values (back transformed to
+  fertility rates) result in the previously calculated MAB forecast.
+
+- **Reverse**: In this step, the TFR forecast calculated earlier is
+  applied. The standardized fertility rate is multiplied by the TFR
+  forecast. As a result you get the future age-specific fertility rates.
+
+![The model structure consists of several procedures: First, the
+age-specific fertility rate is cumulated and standardized to values
+between zero and one. Second, the cumulated and standardized values are
+fitted in a regression to a fifth-degree polynomial of age. Third, the
+estimated regression coefficients remain constant, except the intercept;
+with optimization, the intercept in changed to achieve the previously
+calculated future MAB values. Fourth, the calculations are reversed to
+get standardized age-specific fertility rates. Fifth, the standardized
+values are multiplied by TFR to estimate future age-specific fertility
+rates.](figures/fertility_rate_forecast.png)
+
+model structure
+
+## Code example
+
+``` r
+library(ggplot2)
+library(propopbirth)
+library(dplyr)
+```
+
+Create input data
+
+``` r
+input <- create_input_data(
+  population = fso_pop,
+  births = fso_birth |>
+    dplyr::filter(spatial_unit %in% c("Aarau", "Frauenfeld", "Stadt Zürich")),
+  year_first = 2011,
+  year_last = 2023,
+  age_fert_min = 15,
+  age_fert_max = 49,
+  fert_hist_years = 3,
+  binational = TRUE
+)
+```
+
+TFR forecast
+
+``` r
+forecast_tfr <- forecast_tfr_mab(
+  topic = "tfr",
+  topic_data = input$tfr,
+  trend_model = c(
+    model = "lm", start = 2024, end = 2026, trend_past = 7, trend_prop = 0.5
+  ),
+  temporal_model = c(
+    model = "cubic", start = 2027, end = 2055, trend_prop = 0.8, z0_prop = 0.7,
+    z1_prop = 0
+  ),
+  temporal_end = NA,
+  constant_model = c(model = "constant", start = 2056, end = 2075)
+)
+```
+
+``` r
+ggplot(forecast_tfr) +
+  geom_line(aes(x = year, y = tfr, color = category)) +
+  geom_point(aes(x = year, y = tfr, color = category)) +
+  facet_grid(nat ~ spatial_unit) +
+  theme_minimal()
+```
+
+![](forecast_fertility_rate_files/figure-html/unnamed-chunk-4-1.png)
+
+MAB forecast
+
+``` r
+forecast_mab <- forecast_tfr_mab(
+  topic = "mab",
+  topic_data = input$mab,
+  trend_model = c(
+    model = "lm", start = 2024, end = 2026, trend_past = 7, trend_prop = 0.5
+  ),
+  temporal_model = c(
+    model = "Bezier", start = 2027, end = 2055, trend_prop = 0.3, z0_prop = 0.7,
+    z1_prop = 0
+  ),
+  temporal_end = NA,
+  constant_model = c(model = "constant", start = 2056, end = 2075)
+)
+```
+
+``` r
+ggplot(forecast_mab) +
+  geom_line(aes(x = year, y = mab, color = category)) +
+  geom_point(aes(x = year, y = mab, color = category)) +
+  facet_grid(nat ~ spatial_unit) +
+  theme_minimal()
+```
+
+![](forecast_fertility_rate_files/figure-html/unnamed-chunk-6-1.png)
+
+Forecast of the age-specific fertility rate
+
+``` r
+forecast_fer <- forecast_fertility_rate(
+  fer_dat = input$fer,
+  tfr_dat = forecast_tfr,
+  mab_dat = forecast_mab,
+  year_start = 2024,
+  year_end = 2075
+)
+```
+
+``` r
+forecast_fer |>
+  DT::datatable(options = list(pageLength = 5))
+```
+
+Plot with year on x-axis
+
+``` r
+y_last <- max(input[["fer_y"]]$year)
+
+forecast_fer |>
+  bind_rows(input$fer_y) |>
+  filter(age %% 5 == 0) |>
+  mutate(age = factor(age)) |>
+  ggplot() +
+  geom_vline(xintercept = y_last + 1, linetype = 2) +
+  geom_line(aes(year, birth_rate, color = age)) +
+  facet_grid(nat ~ spatial_unit)
+```
+
+![](forecast_fertility_rate_files/figure-html/unnamed-chunk-9-1.png)
+
+Plot with age on x-axis
+
+``` r
+forecast_fer |>
+  bind_rows(input$fer_y) |>
+  filter(year %% 10 == 0) |>
+  mutate(year = factor(year)) |>
+  ggplot() +
+  geom_line(aes(age, birth_rate, color = year)) +
+  facet_grid(nat ~ spatial_unit)
+```
+
+![](forecast_fertility_rate_files/figure-html/unnamed-chunk-10-1.png)

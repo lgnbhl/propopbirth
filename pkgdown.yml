@@ -1,0 +1,11 @@
+pandoc: 3.1.11
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  forecast_fertility_rate: forecast_fertility_rate.html
+  forecast_tfr_mab: forecast_tfr_mab.html
+  prepare_data: prepare_data.html
+last_built: 2025-11-25T11:46Z
+urls:
+  reference: https://statistik-aargau.github.io/propopbirth_test/reference
+  article: https://statistik-aargau.github.io/propopbirth_test/articles
